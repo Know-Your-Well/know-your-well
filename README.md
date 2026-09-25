@@ -2,7 +2,7 @@
 
 2024-2025 Nebraska Water Center Senior Design Capstone Project
 
-[Know Your Well YouTube Channel](https://www.youtube.com/@knowyourwell3985)
+[Know Your Wellselection YouTube Channel](https://www.youtube.com/@knowyourwell3985)
 
 ### Table of Contents
 
@@ -28,7 +28,7 @@
 
 ## Executive Summary
 
-[Know Your Well](https://knowyourwell.unl.edu/ "Know Your Well") (KYW) is a project started at the University of Nebraska affiliated Nebraska Water Center (referred to as "the sponsor") that engages high school students and teachers in sampling and testing groundwater quality. About 160 students from 19 schools participated in KYW Phase 1 from 2017 to 2019. Through KYW, students are trained in well construction, features affecting well water quality, and how to collect and test samples. While sampling, students use a Progressive Web Application (PWA) to record well coordinates, land use, and other relevant well features, laying the groundwork for understanding groundwater vulnerability.
+[Know Your Wellselection](https://knowyourwell.unl.edu/ "Know Your Wellselection") (KYW) is a project started at the University of Nebraska affiliated Nebraska Water Center (referred to as "the sponsor") that engages high school students and teachers in sampling and testing groundwater quality. About 160 students from 19 schools participated in KYW Phase 1 from 2017 to 2019. Through KYW, students are trained in well construction, features affecting well water quality, and how to collect and test samples. While sampling, students use a Progressive Web Application (PWA) to record well coordinates, land use, and other relevant well features, laying the groundwork for understanding groundwater vulnerability.
 
 ## Introduction
 
@@ -50,7 +50,7 @@ One limitation is that the user must have internet access in the location that t
 
 ### Ethical Considerations
 
-There are a few ethical considerations to be made in the production of Know Your Well. First, we must ensure that students gain the well owner’s consent before going on to their property to test their well. In Nebraska, wells are private property and require owner consent for students to enter the physical area to perform cataloguing. This is traditionally handled by external storage of a consent form provided by the well’s owner, but as part of image storage features, this form can now be stored within the PWA's database.
+There are a few ethical considerations to be made in the production of Know Your Wellselection. First, we must ensure that students gain the well owner’s consent before going on to their property to test their well. In Nebraska, wells are private property and require owner consent for students to enter the physical area to perform cataloguing. This is traditionally handled by external storage of a consent form provided by the well’s owner, but as part of image storage features, this form can now be stored within the PWA's database.
 
 Also, we want to protect the anonymity of the students, wells, and well owners. This app also retains potentially sensitive information such as the full names of individuals, geographic coordinates of wells, and free-form text that may include unexpected and potentially sensitive data. The team’s photo upload features are now in production, meaning the app will also store user-submitted images which likewise may present unexpected and potentially sensitive data. The introduction of the geographic map interface shows the location of a well on a map; to maintain owner privacy, the level of zoom on the map has been limited to obscure the exact location, and well details are not displayed from this page.
 
@@ -80,7 +80,7 @@ Input validation is currently handled by string patterns in the forms on the pag
 
 ### CSV Exporting
 
-An export page exists in the app that allows users to export data about wells they have access to. This page can be accessed from the navigation bar once the user is logged in. There are currently two supporteed data export options: All Well Data and Image Metadata.
+An export page exists in the app that allows users to export data about wells they have access to. This page can be accessed from the navigation bar once the user is logged in. There are currently two supporteed data export options: All Wellselection Data and Image Metadata.
 
 ### Sorting/Filtering Wells
 
@@ -89,13 +89,13 @@ Wells can be sorted and filtered using the two buttons at the top of the wells p
 - **Sort**
   - Oldest First (default)
   - Newest First
-  - Well Name A-Z
-  - Well Name Z-A
+  - Wellselection Name A-Z
+  - Wellselection Name Z-A
   - Most Recent Field Activity
 - **Filter**
   - County
   - Natural Resource District
-  - Search (By Well Name)
+  - Search (By Wellselection Name)
   - Latitude Range
   - Longitude Range
   - Wells in a \_\_\_ mile radius
@@ -166,7 +166,7 @@ _More in-depth information can be found in [Frontend.md](/Frontend.md)_
   - Displays data fetched from Node using [Axios](https://axios-http.com/docs/intro).
   - Validates inputs with [HTML pattern attributes](https://developer.mozilla.org/en-US/docs/Web/HTML/Attributes/pattern).
 - Organized into three main views:
-  - **Well Info** – network-only form for basic well data.
+  - **Wellselection Info** – network-only form for basic well data.
   - **Field** – offline‑first form for field activities (pre‑cache and upload on reconnect).
   - **Lab** – post‑field lab results tied to a field entry.
 

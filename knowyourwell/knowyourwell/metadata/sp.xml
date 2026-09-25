@@ -20,7 +20,7 @@
     <md:AssertionConsumerService Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST" Location="https://knowyourwell.azurewebsites.net/saml/acs" index="1"/>
   </md:SPSSODescriptor>
   <md:ContactPerson contactType="technical">
-    <md:GivenName>Know Your Well</md:GivenName>
+    <md:GivenName>Know Your Wellselection</md:GivenName>
     <md:EmailAddress>knowyourwell@unl.edu</md:EmailAddress>
   </md:ContactPerson>
 </md:EntityDescriptor>

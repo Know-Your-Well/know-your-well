@@ -102,7 +102,7 @@ export default function ExportPage() {
         <br />
         <List.Item>
           <List.Content>
-            <EntryPrompt id='ex_all' fieldTitle={"Well, Field, Class & Water Science Lab"} />
+            <EntryPrompt id='ex_all' fieldTitle={"Wellselection, Field, Class & Water Science Lab"} />
             <p>All data for School separated by commas</p>
             <button
               type="button"
@@ -117,7 +117,7 @@ export default function ExportPage() {
         <br />
         <List.Item>
           <List.Content>
-            <EntryPrompt id='ex_image' fieldTitle={"Well & Image"} />
+            <EntryPrompt id='ex_image' fieldTitle={"Wellselection & Image"} />
             <p>Selected well data and all image data; no actual images</p>
             <button
               type="button"

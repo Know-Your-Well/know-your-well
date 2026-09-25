@@ -77,7 +77,7 @@ function responseDataToMarkerList(responseData) {
   return markerList;
 }
 
-const Well = () => {
+const Wellselection = () => {
   const [isLoading, setLoading] = useState(true);
   const [isSortDropdownVisible, setSortDropdownVisibility] = useState(false);
   const [isFilterDropdownVisible, setFilterDropdownVisibility] =
@@ -740,4 +740,4 @@ const Well = () => {
   }
 };
 
-export default Well;
+export default Wellselection;

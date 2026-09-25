@@ -11,31 +11,31 @@ import { useUser } from "./usercontext";
 import axios from "axios";
 
 const nameMap = {
-  "wi_wellcode": "Well Code:",
+  "wi_wellcode": "Wellselection Code:",
   "wi_datacollector": "Data Collector:",
-  "wi_dnr_well_id": "DNR Well ID:",
+  "wi_dnr_well_id": "DNR Wellselection ID:",
   "wi_address": "Address:",
   "wi_state": "State:",
   "county_id": "County:",
   "wi_phone_well_user": "Phone # (of well user):",
-  "wi_well_owner": "Well owner (if different from resident):",
+  "wi_well_owner": "Wellselection owner (if different from resident):",
   "wi_smelltaste": "Complaints about smell or taste of water?:",
   "wi_welldry": "Does the well ever go dry?:",
   "wi_maintenance5yr": "Maintenance done to the well itself within the last five years:",
-  "wi_numberwelluser": "Number of Well Users:",
+  "wi_numberwelluser": "Number of Wellselection Users:",
   "wi_estlatitude": "Estimated Latitude:",
   "wi_boreholediameter": "Bore hole diameter (inches):",
   "wi_waterleveldepth": "Water level (feet):",
   "wi_aquiferclass": "Aquifer Class:",
-  "wi_wellcasematerial": "Well Casing Material:",
-  "wi_wellname": "Well Name:",
-  "wi_registration_number": "Well Registration Number:",
-  "wi_well_user": "Name of Resident Well User:",
+  "wi_wellcasematerial": "Wellselection Casing Material:",
+  "wi_wellname": "Wellselection Name:",
+  "wi_registration_number": "Wellselection Registration Number:",
+  "wi_well_user": "Name of Resident Wellselection User:",
   "wi_city": "Village, Town, or City:",
   "wi_zipcode": "Zip code:",
   "nrd_id": "NRD:",
   "wi_email_well_user": "Email (of well user):",
-  "wi_installyear": "Well construction completion year:",
+  "wi_installyear": "Wellselection construction completion year:",
   "wi_smelltaste_description": "Smell or taste of water desciption:",
   "wi_welldry_description": "When well goes dry:",
   "wi_landuse5yr": "Major land use / development changes around the well within the last five years?:",
@@ -43,7 +43,7 @@ const nameMap = {
   "wi_estlongitude": "Estimated Longitude:",
   "wi_totaldepth": "Total depth of well (feet):",
   "wi_aquifertype": "Aquifer Type:",
-  "wi_welltype": "Well Type (Construction Method):",
+  "wi_welltype": "Wellselection Type (Construction Method):",
   "wi_observation": "Observations:"
 };
 
@@ -220,7 +220,7 @@ export default function ViewWell() {
     const basicInfoList = ['Basic Info', ...basicInfo.map((key) => [key, formElements[key]])];
     const locationInfoList = ['Location Info', ...locationInfo.map((key) => [key, formElements[key]])];
     const contactInfoList = ['Contact Info', ...contactInfo.map((key) => [key, formElements[key]])];
-    const wellInfoList = ['Well Info', ...wellInfo.map((key) => [key, formElements[key]])];
+    const wellInfoList = ['Wellselection Info', ...wellInfo.map((key) => [key, formElements[key]])];
 
     for (const i of [basicInfoList, locationInfoList, contactInfoList, wellInfoList]) {
       const summaryName = i[0];
