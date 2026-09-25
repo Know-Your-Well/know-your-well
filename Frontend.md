@@ -18,12 +18,12 @@
   - Sends information collected by users to the server app using [Axios](https://axios-http.com/docs/intro).
 - Organized by the major points where the app is used with menus to navigate between these sections.
 
-  - Well Info &#8211; General information about the well.
+  - Wellselection Info &#8211; General information about the well.
     - Designed to be usable without internet access.
   - Field &#8211; Collecting information in the field.
     - Designed to be usable without internet access.
   - Lab &#8211; Students input results of lab tests that they run on water samples.
-    - Similar to Well-Info, except the user selects the well log they want to update for the Lab section.
+    - Similar to Wellselection-Info, except the user selects the well log they want to update for the Lab section.
     - Associated with a Field entry
   - Image &#8211; Students may take or upload a picture of certain features or documents associated with a well.
     - Designed to be usable without internet access.
@@ -52,13 +52,13 @@ In this case, cachedData is initialized with a [ternary operator](https://develo
 
 ### Automatic Offline Data Upload
 
-On forms that support it (Well Info, Field, and Image), when the user clicks the "Submit" button while they do not have a connection to the server, the app will instead place the data in a queue that will periodically check for a connection and, if one is found, attempt to automatically upload the data. When the app attempts to upload this data, it will keep track of which requests succeed and which requests fail, and will only remove data from the queue if the upload succeeds. In the case that not all data successfully uploads, the app will prompt the user informing them of such, and will try again the next time a connection is established; if all data uploads without issue, the app will inform the user of such.
+On forms that support it (Wellselection Info, Field, and Image), when the user clicks the "Submit" button while they do not have a connection to the server, the app will instead place the data in a queue that will periodically check for a connection and, if one is found, attempt to automatically upload the data. When the app attempts to upload this data, it will keep track of which requests succeed and which requests fail, and will only remove data from the queue if the upload succeeds. In the case that not all data successfully uploads, the app will prompt the user informing them of such, and will try again the next time a connection is established; if all data uploads without issue, the app will inform the user of such.
 
 ## Menu Pages
 
-Menu pages serve as our primary method of navigation. These menus are primarily created using [Bootstrap buttons](https://getbootstrap.com/docs/4.0/components/buttons/) that are links to the appropriate pages. To display buttons that are relevant to specific users, we use conditional rendering based on whether the backend has sent the data that is needed. An example of this process from well.js is provided below.
+Menu pages serve as our primary method of navigation. These menus are primarily created using [Bootstrap buttons](https://getbootstrap.com/docs/4.0/components/buttons/) that are links to the appropriate pages. To display buttons that are relevant to specific users, we use conditional rendering based on whether the backend has sent the data that is needed. An example of this process from wellselection.js is provided below.
 <br /> ![Conditional Rendering](DocumentationImages/conditionalRendering.PNG "Conditional Rendering") <br />
-In the first line isLoading is initialized very similarly to the variables mentioned above in the forms section with a default value of true to represent that the page starts with a call to the backend. After the Axios request executes and the data is returned, the new data is stored in localStorage and is then processed into a form that can be returned to the user's browser (a list of Bootstrap buttons), and isLoading is set to false. However, since there is no guarantee when, if ever, the DB will return the values if isLoading is true, the page will first try to process and display data cached as a result of previous Axios requests or simply return the default Create Well button if none can be found. If isLoading is set to false, the processed data from the DB is returned.
+In the first line isLoading is initialized very similarly to the variables mentioned above in the forms section with a default value of true to represent that the page starts with a call to the backend. After the Axios request executes and the data is returned, the new data is stored in localStorage and is then processed into a form that can be returned to the user's browser (a list of Bootstrap buttons), and isLoading is set to false. However, since there is no guarantee when, if ever, the DB will return the values if isLoading is true, the page will first try to process and display data cached as a result of previous Axios requests or simply return the default Create Wellselection button if none can be found. If isLoading is set to false, the processed data from the DB is returned.
 
 ## Viewing Pages
 
