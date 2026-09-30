@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, screen, fireEvent, act } from '@testing-library/react';
-import Well from '../well';
+import WellSelection from '../wellSelection';
 import Axios from 'axios';
 import { MemoryRouter, Router, Routes, Route } from 'react-router-dom';
 import '@testing-library/jest-dom';
@@ -70,7 +70,7 @@ const renderWellWithContext = () => {
   return render(
     <MemoryRouter>
       <WellFieldLabContext.Provider value={mockedWellFieldLabContext}>
-        <Well />
+        <WellSelection />
       </WellFieldLabContext.Provider>
     </MemoryRouter>
   );
@@ -184,7 +184,7 @@ describe('Geographic Map Interface in Well Component', () => {
             path="/" 
             element={
               <WellFieldLabContext.Provider value={mockedWellFieldLabContext}>
-                <Well />
+                <WellSelection />
               </WellFieldLabContext.Provider>
             }
           />

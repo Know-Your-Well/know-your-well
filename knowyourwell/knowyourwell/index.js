@@ -12,7 +12,7 @@ const { response } = require("express");
 const path = require("path");
 const { error } = require("console");
 
-//require('dotenv').config()
+require('dotenv').config()
 
 app.use(
   session({
