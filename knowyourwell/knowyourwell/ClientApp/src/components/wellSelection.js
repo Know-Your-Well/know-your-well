@@ -448,7 +448,7 @@ const WellSelection = () => {
             }}
           >
             <label
-              for="satelliteToggle"
+              htmlFor="satelliteToggle"
               style={{
                 fontSize: "1em",
                 margin: "0px 5px",
