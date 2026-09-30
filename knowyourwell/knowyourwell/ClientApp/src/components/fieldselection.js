@@ -3,7 +3,7 @@ import { List } from "semantic-ui-react";
 import { useSearchParams } from "react-router-dom";
 import Axios from "axios";
 import moment from "moment";
-import Wellselection from "./wellselection";
+import WellSelection from "./wellSelection";
 
 var fieldList = [];
 
