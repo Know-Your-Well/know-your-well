@@ -6,7 +6,7 @@ import Axios from "axios";
 import pullAt from "lodash/pullAt";
 import Login from "./components/login";
 import NavMenu from "./components/navmenu";
-import Wellselection from "./components/wellselection";
+import WellSelection from "./components/wellSelection";
 import EditWell from "./components/editwell";
 import WellInfo, { generateWellcode } from "./components/wellinfo";
 import Field from "./components/field";
@@ -286,7 +286,7 @@ export default function App() {
         >
           <Routes>
             <Route exact path="/" element={<Login />} />
-            <Route exact path="/well" element={<Wellselection />} />
+            <Route exact path="/well" element={<WellSelection />} />
             <Route exact path="/editwell" element={<EditWell />} />
             <Route exact path="/wellinfo" element={<WellInfo />} />
             <Route exact path="/field" element={<Field />} />

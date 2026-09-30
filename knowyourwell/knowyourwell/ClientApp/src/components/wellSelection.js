@@ -77,7 +77,11 @@ function responseDataToMarkerList(responseData) {
   return markerList;
 }
 
+<<<<<<<< HEAD:knowyourwell/knowyourwell/ClientApp/src/components/wellselection.js
 const Wellselection = () => {
+========
+const WellSelection = () => {
+>>>>>>>> 26-27-senior-design/duncan/#165-rename-well-to-wellselection:knowyourwell/knowyourwell/ClientApp/src/components/wellSelection.js
   const [isLoading, setLoading] = useState(true);
   const [isSortDropdownVisible, setSortDropdownVisibility] = useState(false);
   const [isFilterDropdownVisible, setFilterDropdownVisibility] =
@@ -740,4 +744,8 @@ const Wellselection = () => {
   }
 };
 
+<<<<<<<< HEAD:knowyourwell/knowyourwell/ClientApp/src/components/wellselection.js
 export default Wellselection;
+========
+export default WellSelection;
+>>>>>>>> 26-27-senior-design/duncan/#165-rename-well-to-wellselection:knowyourwell/knowyourwell/ClientApp/src/components/wellSelection.js
