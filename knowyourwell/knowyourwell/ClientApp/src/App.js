@@ -8,7 +8,7 @@ import Login from "./components/login";
 import NavMenu from "./components/navmenu";
 import WellSelection from "./components/wellSelection";
 import EditWell from "./components/editwell";
-import WellInfo, { generateWellcode } from "./components/wellinfo";
+import WellInfo, { generateWellCode } from "./components/wellinfo";
 import Field from "./components/field";
 import ClassLab from "./components/classlab";
 import PreviousEntries from "./components/previousentries";
@@ -108,7 +108,7 @@ export default function App() {
     }
 
     for (const [i, wellInfo] of wellInfoQueue.entries()) {
-      const wellcode = await generateWellcode();
+      const wellcode = await generateWellCode();
       await Axios.post("/createwellinfo", {
         address: wellInfo.address,
         aquiferclass: wellInfo.aquiferclass,
