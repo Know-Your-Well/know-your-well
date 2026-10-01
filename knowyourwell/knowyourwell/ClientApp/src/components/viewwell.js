@@ -11,51 +11,72 @@ import { useUser } from "./usercontext";
 import axios from "axios";
 
 const nameMap = {
-  "wi_wellcode": "Wellselection Code:",
+  "wi_wellcode": "Well Code:",
   "wi_datacollector": "Data Collector:",
-  "wi_dnr_well_id": "DNR Wellselection ID:",
+  "wi_dnr_well_id": "DNR Well ID:",
   "wi_address": "Address:",
   "wi_state": "State:",
   "county_id": "County:",
   "wi_phone_well_user": "Phone # (of well user):",
-  "wi_well_owner": "Wellselection owner (if different from resident):",
+  "wi_well_owner": "Well owner (if different from resident):",
   "wi_smelltaste": "Complaints about smell or taste of water?:",
   "wi_welldry": "Does the well ever go dry?:",
   "wi_maintenance5yr": "Maintenance done to the well itself within the last five years:",
-  "wi_numberwelluser": "Number of Wellselection Users:",
+  "wi_numberwelluser": "Number of Well Users:",
   "wi_estlatitude": "Estimated Latitude:",
   "wi_boreholediameter": "Bore hole diameter (inches):",
   "wi_waterleveldepth": "Water level (feet):",
   "wi_aquiferclass": "Aquifer Class:",
-  "wi_wellcasematerial": "Wellselection Casing Material:",
-  "wi_wellname": "Wellselection Name:",
-  "wi_registration_number": "Wellselection Registration Number:",
-  "wi_well_user": "Name of Resident Wellselection User:",
+  "wi_wellcasematerial": "Well Casing Material:",
+  "wi_wellname": "Well Name:",
+  "wi_registration_number": "Well Registration Number:",
+  "wi_well_user": "Name of Resident Well User:",
   "wi_city": "Village, Town, or City:",
   "wi_zipcode": "Zip code:",
   "nrd_id": "NRD:",
   "wi_email_well_user": "Email (of well user):",
-  "wi_installyear": "Wellselection construction completion year:",
-  "wi_smelltaste_description": "Smell or taste of water desciption:",
+  "wi_installyear": "Well construction completion year:",
+  "wi_smelltaste_description": "Smell or taste of water description:",
   "wi_welldry_description": "When well goes dry:",
   "wi_landuse5yr": "Major land use / development changes around the well within the last five years?:",
   "wi_pestmanure": "Manure, fertilizer, or pesticides been applied the well within the last five years:",
   "wi_estlongitude": "Estimated Longitude:",
   "wi_totaldepth": "Total depth of well (feet):",
   "wi_aquifertype": "Aquifer Type:",
-  "wi_welltype": "Wellselection Type (Construction Method):",
+  "wi_welltype": "Well Type (Construction Method):",
   "wi_observation": "Observations:"
 };
 
 export default function ViewWell() {
+  console.log("ViewWell")
+
+  let tab_amount = "\t";
+  let index = 0;
+
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const [searchParams] = useSearchParams();
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const well_id = parseInt(searchParams.get("id"));
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const wellName = searchParams.get("wellName");
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const wellcode = searchParams.get("wellcode");
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const navigate = useNavigate();
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const [landFeatures, setLandFeatures] = useState();
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const { user } = useUser();
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   useEffect(() => {
     if (user?.displayn === "") {
       alert("You are not yet logged in. Please log in.");
@@ -63,18 +84,28 @@ export default function ViewWell() {
     }
   }, [navigate, user]);
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const backButton = () => {
     window.location.href = `/EditWell?id=${well_id}&wellcode=${wellcode}&wellName=${wellName}`;
   };
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const backToWellsButton = () => {
     window.location.href = "/well";
   };
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const [isLoading, setLoading] = useState(true);
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   let formElements = [];
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   useEffect(() => {
     Axios.get("/GetWellInfo", {
       responseType: "json",
@@ -87,6 +118,8 @@ export default function ViewWell() {
     });
   }, []);
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   useEffect(() => {
     Axios.get("/LandFeatures", {
       responseType: "json",
@@ -98,6 +131,8 @@ export default function ViewWell() {
     });
   }, [well_id]);
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   const renderLandFeatures = () => {
     // Check if landFeatures is undefined or null
     if (!landFeatures) {
@@ -142,6 +177,8 @@ export default function ViewWell() {
     );
   };
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   if (formElements.length === 0) {
     const wellCookie = localStorage.getItem("wellData");
     let wells = null;
@@ -162,9 +199,14 @@ export default function ViewWell() {
     }
   }
 
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
   let columnList = [];
 
-  if (formElements) {
+  console.log(tab_amount,index,"bug here?");
+  index += 1;
+  if (formElements)
+  {
     formElements["county_id"] = countyOptions.find(
       (option) => option.key === formElements["county_id"].toString(),
     ).value;
@@ -220,19 +262,24 @@ export default function ViewWell() {
     const basicInfoList = ['Basic Info', ...basicInfo.map((key) => [key, formElements[key]])];
     const locationInfoList = ['Location Info', ...locationInfo.map((key) => [key, formElements[key]])];
     const contactInfoList = ['Contact Info', ...contactInfo.map((key) => [key, formElements[key]])];
-    const wellInfoList = ['Wellselection Info', ...wellInfo.map((key) => [key, formElements[key]])];
+    const wellInfoList = ['Well Info', ...wellInfo.map((key) => [key, formElements[key]])];
 
-    for (const i of [basicInfoList, locationInfoList, contactInfoList, wellInfoList]) {
-      const summaryName = i[0];
-      const fields = i.slice(1);
+    // rotating_list swaps between the 4 arrays in this for loop. It is not a index.
+    //     The console.log calls this a array. It's a list, it is flexible data type and size.
+    for (const rotating_list of [basicInfoList, locationInfoList, contactInfoList, wellInfoList]) {
+      const summaryName = rotating_list[0];
+      const fields = rotating_list.slice(1);
       columnList.push(
-        <>
+        <React.Fragment key={summaryName}>
           <details key={summaryName} style={{ marginTop: "2px", alignItems: "center" }}>
             <summary style={{ textAlign: "left", fontSize: "1.25em", background: "#686868", padding: "2px 8px", color: "white" }}><b>{summaryName}</b></summary>
             {
               // map through fields and separate into two columns
               fields.map((field, index) => {
                 if (index % 2 === 0) {
+                  console.log(tab_amount,"field printing:");
+                  console.log(tab_amount,"\t",rotating_list);
+                  console.log(tab_amount,"\t",field);
                   return (
                     <div key={index} className="row" style={{ paddingTop: "8px" }}>
                       <div className="col">
@@ -256,75 +303,81 @@ export default function ViewWell() {
             }
           </details>
           <br />
-        </>,
+        </React.Fragment>,
       );
     }
 
-    return (
-      <div className="css">
-        <h2>
-          {" "}
-          {wellcode}: {wellName}: Well Info
-        </h2>
-        <br />
-        <div className="container" style={{ textAlign: "center" }}>
-          {columnList}
-          <div key="datacollector" className="row">
-            <div className="col">
-              <p style={{ textAlign: "center" }}>
-                <b>Data Collector:</b>{" "}
-                {formElements["wi_datacollector"]}
-              </p>
-            </div>
-          </div>
-          <div key="dateentered" className="row">
-            <div className="col">
-              <p style={{ textAlign: "center" }}>
-                <b>Date Entered:</b>{" "}
-                {moment
-                  .utc(formElements["wi_datecollected"])
-                  .local()
-                  .format("MM-DD-YYYY hh:mm A")}
-              </p>
-            </div>
-          </div>
-          {renderLandFeatures()}
+    console.log(tab_amount,"return values be here yo");
+    let returnHTMLElementIfFormElementsIsNotBlank = (
+        <div className="css">
+          <h2>
+            {" "}
+            {wellcode}: {wellName}: Well Info
+          </h2>
           <br />
+          <div className="container" style={{ textAlign: "center" }}>
+            {columnList}
+            <div key="datacollector" className="row">
+              <div className="col">
+                <p style={{ textAlign: "center" }}>
+                  <b>Data Collector:</b>{" "}
+                  {formElements["wi_datacollector"]}
+                </p>
+              </div>
+            </div>
+            <div key="dateentered" className="row">
+              <div className="col">
+                <p style={{ textAlign: "center" }}>
+                  <b>Date Entered:</b>{" "}
+                  {moment
+                      .utc(formElements["wi_datecollected"])
+                      .local()
+                      .format("MM-DD-YYYY hh:mm A")}
+                </p>
+              </div>
+            </div>
+            {renderLandFeatures()}
+            <br />
+            <button
+                type="button"
+                style={{ width: "130px", height: "17%" }}
+                className="btn btn-primary btn-lg"
+                onClick={backButton}
+            >
+              Back
+            </button>
+            <br />
+            <br />
+            <a href="mailto:knowyourwell@unl.edu" style={{ textAlign: "center" }}>
+              If any data is incorrect email us at knowyourwell@unl.edu
+            </a>
+          </div>
+        </div>
+    );
+    console.log(tab_amount,"returnHTMLElementIfFormElementsIsNotBlank");
+
+    return returnHTMLElementIfFormElementsIsNotBlank;
+  } else {
+    let returnHTMLElementIfFormElementsIsBlank = (
+        <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+        >
+          <h1>The well you're looking for does not exist</h1>
           <button
-            type="button"
-            style={{ width: "130px", height: "17%" }}
-            className="btn btn-primary btn-lg"
-            onClick={backButton}
+              type="button"
+              style={{ width: "180px", height: "17%" }}
+              className="btn btn-primary btn-lg"
+              onClick={backToWellsButton}
           >
             Back
           </button>
-          <br />
-          <br />
-          <a href="mailto:knowyourwell@unl.edu" style={{ textAlign: "center" }}>
-            If any data is incorrect email us at knowyourwell@unl.edu
-          </a>
         </div>
-      </div>
     );
-  } else {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h1>The well you're looking for does not exist</h1>
-        <button
-          type="button"
-          style={{ width: "180px", height: "17%" }}
-          className="btn btn-primary btn-lg"
-          onClick={backToWellsButton}
-        >
-          Back
-        </button>
-      </div>
-    );
+    console.log(tab_amount,"returnHTMLElementIfFormElementsIsBlank");
+    return returnHTMLElementIfFormElementsIsBlank;
   }
 }
