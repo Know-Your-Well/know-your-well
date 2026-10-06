@@ -3,6 +3,7 @@
 
 ##new##new
 /node_modules
+.env
 
 ##new##new
 # User-specific files
