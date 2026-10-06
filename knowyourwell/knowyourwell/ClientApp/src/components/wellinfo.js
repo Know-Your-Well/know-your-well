@@ -83,7 +83,7 @@ export default function WellInfo() {
 
   function cacheWellInfo() {
     localStorage.setItem("wellInfo", JSON.stringify(wellInfo));
-    alert("Well information has been saved! You can return to edit this later, or can keep working on it.");
+    alert("Wellselection information has been saved! You can return to edit this later, or can keep working on it.");
   }
 
   function clearLocalStorage() {
@@ -263,7 +263,7 @@ export default function WellInfo() {
           } else {
             updateWellInfo("waterleveldepth", "");
             alert(
-              "Well water depth cannot be greater than total well depth.",
+              "Wellselection water depth cannot be greater than total well depth.",
             );
           }
         }}

@@ -203,7 +203,7 @@ GO
    - **NRD**
    - **County**
    - **School**
-   - **Well Info**
+   - **Wellselection Info**
    - **Field Activity**
    -  **Classroom Lab**
    -  **Land Feature**
@@ -211,8 +211,8 @@ GO
    -  **Image**
    -  **Tooltip**
    -  **Tooltip Image**
-   -  **All Well Field Class**
-   -  **All Well Field Class WSL**
+   -  **All Wellselection Field Class**
+   -  **All Wellselection Field Class WSL**
 
 **Note:** If you encounter a proxy error, run this query to insert data into the tblNRDLookup and tblSchool tables.
 #### SQL Query to Insert Data into `tblNRDLookup` and `tblSchool`:
