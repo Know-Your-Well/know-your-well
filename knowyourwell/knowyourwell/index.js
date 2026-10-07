@@ -44,7 +44,7 @@ try {
   config = {
     user: "kywAdmin",
     password: process.env.APPSETTING_MSSQL_PASSWORD,
-    database: "kyw",
+    database: "kywtestdb", //this means go to the test database. not the produciton one.
     server: "kyw.database.windows.net",
     pool: {
       max: 10,
