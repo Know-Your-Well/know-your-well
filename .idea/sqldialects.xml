@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/sysdiagrams.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblClassroomLab.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblCountyLookup.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblFieldActivity.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblImage.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblKYWAdminLogin.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblNRDLookup.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblSchool.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblTooltip.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblTooltipImage.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblWaterScienceLab.sql" dialect="TSQL" />
+    <file url="file://$USER_HOME$/Downloads/test tube/kywtestdb/dbo/tblWellInfo.sql" dialect="TSQL" />
+  </component>
+</project>
