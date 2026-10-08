@@ -42,18 +42,20 @@ try {
   config = JSON.parse(rawData);
 } catch (e) {
   config = {
-    user: "kywAdmin",
-    password: process.env.APPSETTING_MSSQL_PASSWORD,
-    database: "kywtestdb", //this means go to the test database. not the produciton one.
-    server: "kyw.database.windows.net",
+    user: "sa", //this is my username. claude came up with it. :-/
+    password: process.env.localDatabasePassword,
+    database: "kywdev",
+        // production = kyw,
+        // dev = whatever your local calls it
+    server: "localhost",
     pool: {
       max: 10,
       min: 0,
       idleTimeoutMillis: 30000,
     },
     options: {
-      encrypt: true, // for azure
-      trustServerCertificate: false, // change to true for local dev / self-signed certs
+      encrypt: false, // 'true' for azure
+      trustServerCertificate: true, // change to true for local dev / self-signed certs
     },
   };
 }
