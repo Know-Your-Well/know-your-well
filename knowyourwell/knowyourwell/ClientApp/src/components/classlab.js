@@ -4,7 +4,7 @@ import "./css/forms.css";
 import DatePicker from "react-datetime";
 import "react-datetime/css/react-datetime.css";
 import { useSearchParams } from "react-router-dom";
-import FormFooter from "./reusable/formfooter";
+import FormFooterReactElement from "./reusable/formFooterReactElement";
 import devClassLab from "./resources/devclasslab.js";
 import prodClassLab from "./resources/prodclasslab.js";
 import classLabPrompts from "./resources/classlabprompts.js";
@@ -236,7 +236,7 @@ export default function ClassLab() {
         </div>
       </div>
       <br />
-      <FormFooter
+      <FormFooterReactElement
         submitForm={submitForm}
         backButton={backButton}
         cacheForm={cacheLabForm}

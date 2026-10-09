@@ -7,7 +7,7 @@ import "react-datetime/css/react-datetime.css";
 import { useSearchParams } from "react-router-dom";
 import NumberEntry from "./reusable/numberentry";
 import { useContext } from "react";
-import FormFooter from "./reusable/formfooter";
+import FormFooterReactElement from "./reusable/formFooterReactElement";
 import devFieldData from "./resources/devfielddata";
 import prodFieldData from "./resources/prodfielddata";
 import fieldPrompts from "./resources/fieldprompts";
@@ -355,7 +355,7 @@ export default function Field() {
         </div>
       </div>
       <br />
-      <FormFooter
+      <FormFooterReactElement
         submitForm={submitForm}
         onClick={cacheWellInfo}
         backButton={backButton}

@@ -40,7 +40,7 @@ export default function Login() {
         .catch(function (error) {
           console.error("Failed to create dev sesh:", error);
         });
-    } else {
+    } else { // production login redirects to nebraskaCloud.
       const options = {
         method: "GET",
         mode: "no-cors",
