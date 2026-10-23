@@ -3,6 +3,7 @@
 follow these steps.
 1. install .NET 6.0 ![here](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 2. go to ```knowyourwell/knowyourwell``` in your terminal
+   3. you should be in ```PS C:\Users\User\Desktop\...\senior_design\know_your_well\knowyourwell\knowyourwell> ```
 3. run ```npm install```
 4. create a ".env" file in the directory: ```knowyourwell/knowyourwell/.env``` and have the field: ```APPSETTING_MSSQL_PASSWORD=``` populated with your password. you have to addd that field text.
 5. Uncomment out line 15 of ```knowyourwell/knowyourwell/index.js``` so that it fetches what's in the environment file
