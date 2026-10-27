@@ -1,6 +1,8 @@
 import React from "react";
 import { List } from "semantic-ui-react";
 import Axios from "axios";
+import {jsPDF} from "jspdf";
+import autoTable from "jspdf-autotable";
 import csvKey from "./resources/csvkey";
 import EntryPrompt from "./reusable/entryprompt";
 
@@ -46,10 +48,47 @@ const exportCSV = () => {
       const file = new File(csv, `welldata_${Date().slice(0, 24).replaceAll(" ", "_")}.csv`, {
         type: "text/csv",
       });
-      openDownloadDialog(file);
+
+        openDownloadDialog(file);
+        exportPDF();   //export pdf file
+
     })
     .catch(function (error) {
       console.error("Error fetching data:", error);
+    });
+};
+
+const exportImagePDF = () => {
+  Axios.get("/allImageMetadata", {
+    responseType: "json",
+  })
+    .then(function (response) {
+      const data = response.data.Data;
+      if (!data.length) {
+        return;
+      }
+      const keys = Object.keys(data[0]);
+      const head = keys.map((k) => csvKey[k] ?? k);
+      const body = data.map((row) => keys.map((k) => String(row[k] ?? "")));
+
+      const pageWidth = Math.max(297, head.length * 20);
+      const doc = new jsPDF({ orientation: "landscape", format: [pageWidth, 210] });
+      autoTable(doc, {
+        head: [head],
+        body: body,
+        styles: { fontSize: 6, cellPadding: 1, overflow: "linebreak" },
+        headStyles: { fillColor: [41, 128, 185], textColor: [255, 255, 255] },
+      });
+
+      const file = new File(
+        [doc.output("blob")],
+        `imagedata_${Date().slice(0, 24).replaceAll(" ", "_")}.pdf`,
+        { type: "application/pdf" }
+      );
+      openDownloadDialog(file);
+    })
+    .catch(function (error) {
+      console.error("Error exporting image PDF:", error);
     });
 };
 
@@ -80,10 +119,48 @@ const exportImageMetadata = () => {
       type: "text/csv",
     });
     openDownloadDialog(file);
+    exportImagePDF();   //export pdf file
   }).catch((error) => {
     console.log(error);
   });
 };
+
+const exportPDF = () => {
+  Axios.get("/csvqueries", {
+    responseType: "json",
+  })
+    .then(function (response) {
+      const data = response.data.Data;
+      if (!data.length) {
+        alert("No data to export.");
+        return;
+      }
+      const keys = Object.keys(data[0]);
+      const head = keys.map((k) => csvKey[k] ?? k);
+      const body = data.map((row) => keys.map((k) => String(row[k] ?? "")));
+
+      const pageWidth = Math.max(297, head.length * 20);
+      const doc = new jsPDF({ orientation: "landscape", format: [pageWidth, 210] });
+      autoTable(doc, {
+        head: [head],
+        body: body,
+        styles: { fontSize: 6, cellPadding: 1, overflow: "linebreak" },
+        headStyles: { fillColor: [41, 128, 185] },
+      });
+
+      const file = new File(
+        [doc.output("blob")],
+        `welldata_${Date().slice(0, 24).replaceAll(" ", "_")}.pdf`,
+        { type: "application/pdf" }
+      );
+      openDownloadDialog(file);
+    })
+    .catch(function (error) {
+      console.error("Error exporting PDF:", error);
+    });
+};
+
+
 
 export default function ExportPage() {
   return (
