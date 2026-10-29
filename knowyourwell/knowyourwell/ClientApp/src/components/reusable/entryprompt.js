@@ -95,7 +95,7 @@ const EntryPrompt = ({ id, fieldTitle, required }) => {
         }
         setTooltipImages(images);
       } catch (error) {
-        console.log(error);
+        console.log("knowyourwell/knowyourwell/ClientApp/src/components/reusable/entryprompt.js --> EntryPrompt --> useEffect , error: "+error);
         setTooltipImages([]);
       }
     };

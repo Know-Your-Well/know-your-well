@@ -48,35 +48,16 @@ const nameMap = {
 };
 
 export default function ViewWell() {
-  console.log("ViewWell")
+  console.log("knowyourwell/knowyourwell/ClientApp/src/components/viewwell.js --> ViewWell")
 
-  let tab_amount = "\t";
-  let index = 0;
-
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const [searchParams] = useSearchParams();
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const well_id = parseInt(searchParams.get("id"));
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const wellName = searchParams.get("wellName");
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const wellcode = searchParams.get("wellcode");
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const navigate = useNavigate();
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const [landFeatures, setLandFeatures] = useState();
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const { user } = useUser();
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   useEffect(() => {
     if (user?.displayn === "") {
       alert("You are not yet logged in. Please log in.");
@@ -84,28 +65,18 @@ export default function ViewWell() {
     }
   }, [navigate, user]);
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const backButton = () => {
     window.location.href = `/EditWell?id=${well_id}&wellcode=${wellcode}&wellName=${wellName}`;
   };
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const backToWellsButton = () => {
     window.location.href = "/well";
   };
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const [isLoading, setLoading] = useState(true);
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   let formElements = [];
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   useEffect(() => {
     Axios.get("/GetWellInfo", {
       responseType: "json",
@@ -118,8 +89,6 @@ export default function ViewWell() {
     });
   }, []);
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   useEffect(() => {
     Axios.get("/LandFeatures", {
       responseType: "json",
@@ -131,8 +100,6 @@ export default function ViewWell() {
     });
   }, [well_id]);
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   const renderLandFeatures = () => {
     // Check if landFeatures is undefined or null
     if (!landFeatures) {
@@ -177,8 +144,6 @@ export default function ViewWell() {
     );
   };
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   if (formElements.length === 0) {
     const wellCookie = localStorage.getItem("wellData");
     let wells = null;
@@ -199,12 +164,8 @@ export default function ViewWell() {
     }
   }
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   let columnList = [];
 
-  console.log(tab_amount,index,"bug here?");
-  index += 1;
   if (formElements)
   {
     formElements["county_id"] = countyOptions.find(
@@ -277,9 +238,6 @@ export default function ViewWell() {
               // map through fields and separate into two columns
               fields.map((field, index) => {
                 if (index % 2 === 0) {
-                  console.log(tab_amount,"field printing:");
-                  console.log(tab_amount,"\t",rotating_list);
-                  console.log(tab_amount,"\t",field);
                   return (
                     <div key={index} className="row" style={{ paddingTop: "8px" }}>
                       <div className="col">
@@ -307,7 +265,6 @@ export default function ViewWell() {
       );
     }
 
-    console.log(tab_amount,"return values be here yo");
     let returnHTMLElementIfFormElementsIsNotBlank = (
         <div className="css">
           <h2>
@@ -354,7 +311,6 @@ export default function ViewWell() {
           </div>
         </div>
     );
-    console.log(tab_amount,"returnHTMLElementIfFormElementsIsNotBlank");
 
     return returnHTMLElementIfFormElementsIsNotBlank;
   } else {
@@ -377,7 +333,7 @@ export default function ViewWell() {
           </button>
         </div>
     );
-    console.log(tab_amount,"returnHTMLElementIfFormElementsIsBlank");
+
     return returnHTMLElementIfFormElementsIsBlank;
   }
 }

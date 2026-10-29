@@ -35,6 +35,7 @@ function responseDataToHTMLList(responseData, well_id, wellName, wellcode) {
 }
 
 export default function FieldSelection() {
+  console.log("knowyourwell/knowyourwell/ClientApp/src/components/fieldselection.js --> FieldSelection");
   const [searchParams, setSearchParams] = useSearchParams();
   const well_id = parseInt(searchParams.get("id"));
   const wellName = searchParams.get("wellName");
@@ -48,6 +49,7 @@ export default function FieldSelection() {
 
   //credit to https://codewithnico.com/react-wait-axios-to-render/ for conditional rendering
   useEffect(() => {
+    console.log("knowyourwell/knowyourwell/ClientApp/src/components/fieldselection.js --> FieldSelection --> useEffect");
     Axios.get("/previousentries", {
       responseType: "json",
       params: {
@@ -55,7 +57,7 @@ export default function FieldSelection() {
         newLab: "True",
       },
     }).then(function (response) {
-      console.log(response);
+      console.log("knowyourwell/knowyourwell/ClientApp/src/components/fieldselection.js --> FieldSelection --> useEffect --> response: "+response);
       localStorage.setItem(
         "fieldListData" + well_id,
         JSON.stringify(response.data),
@@ -68,7 +70,7 @@ export default function FieldSelection() {
       );
       setLoading(false);
     });
-  }, []);
+  }, [wellName, well_id, wellcode]);
 
   if (isLoading) {
     const fieldCookie = localStorage.getItem("fieldListData" + well_id);

@@ -35,6 +35,8 @@ knowyourwell/knowyourwell> npm run server
 knowyourwell/knowyourwell/ClientApp> npm run build 
 # it will build. this takes a few minutes.
 knowyourwell/knowyourwell/ClientApp> node serve-build.js
+# do them at teh same time. it redirects to a command i put in package.json for you <3.
+knowyourwell/knowyourwell/ClientApp> npm offline-run
 ```
 
 any time you changed the program. you need to run ```npm run build``` again.

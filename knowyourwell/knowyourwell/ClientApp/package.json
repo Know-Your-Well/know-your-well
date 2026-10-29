@@ -93,7 +93,9 @@
     "build": "set \"CI=false\" && react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom --watch",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src/"
+    "lint": "eslint ./src/",
+    "serve": "node serve-build.js",
+    "offline-run" : "npm run build && node serve-build.js"
   },
   "eslintConfig": {
     "extends": [

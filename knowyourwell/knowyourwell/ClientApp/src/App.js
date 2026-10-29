@@ -30,6 +30,7 @@ import uploadPhoto from "./components/reusable/photoUpload";
 import { deleteFromDB, getAllFromDB, idbName } from "./setupIndexedDB";
 
 export default function App() {
+  console.log("knowyourwell/knowyourwell/ClientApp/src/App.js --> App")
   const [coords, setCoords] = useState(() => {
     // Try to update coords
     if (navigator.geolocation) {
@@ -310,33 +311,3 @@ export default function App() {
   );
 }
 
-const CachedPreviousEntries = () => {
-  const [cachedData, setCachedData] = useState(null);
-
-  useEffect(() => {
-    const getCachedData = async () => {
-      const cache = await caches.open("previous-entries");
-      const cachedResponse = await cache.match("/previousentries");
-
-      if (cachedResponse) {
-        const data = await cachedResponse.json();
-        setCachedData(data);
-      }
-    };
-
-    getCachedData();
-  }, []);
-
-  return (
-    <div>
-      <h2>Previous Entries (Cached)</h2>
-      {cachedData && (
-        <ul>
-          {cachedData.map((entry, index) => (
-            <li key={index}>{entry}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};

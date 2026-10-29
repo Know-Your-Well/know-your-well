@@ -1,17 +1,16 @@
 ﻿import React, {useEffect, useState} from "react";
 import {List} from "semantic-ui-react";
-import {useSearchParams} from "react-router-dom";
 import Axios from "axios";
 import moment from "moment";
-import {useNavigate} from "react-router-dom";
-import {useUser} from "./usercontext";
 import useWellNavigation from "./reusable/useWellNavigation";
+import {offlineGet} from "./offlineCache";
 
-let previousImages = [];
-let listElements = [];
 
 function generateListElements(previousImages, well_id, name, wellcode)
 {
+    console.log("knowyourwell/knowyourwell/ClientApp/src/components/previousimages.js --> generateListElements")
+    let listElements = [];
+
     for (let [i, entry] of previousImages.entries())
     {
         listElements.push(
@@ -42,6 +41,7 @@ function generateListElements(previousImages, well_id, name, wellcode)
 
 export default function PreviousImages()
 {
+    console.log("knowyourwell/knowyourwell/ClientApp/src/components/previousimages.js --> PreviousImages")
     const
         {
             well_id, // URLSearchParams
@@ -54,45 +54,27 @@ export default function PreviousImages()
 
     const [isLoading, setLoading] = useState(true);
 
-    useEffect(() =>
-    {
-        Axios.get("/previousimages", {
-            responseType: "json",
-            params: {
-                well_id: well_id,
-            },
-        }).then(async (response) =>
-        {
-            const imageList = response.data.ImageList;
-            let i;
+    const [images, setImages] = useState([]);
 
-            for (i = 0; i < imageList.length; i++)
-            {
-                const imageEntry = imageList[i];
-                await Axios.get("/GetImage", {
-                    responseType: "json",
-                    params: {
-                        image_id: imageEntry.image_id,
-                    },
-                }).then((response) =>
-                {
-                    const entry = {
-                        imageDate: imageEntry.im_datecollected,
-                        imageID: imageEntry.image_id,
-                        imageType: response.data.Image[0].im_type,
-                    };
-                    previousImages.push(entry);
-                });
+    useEffect(() => {
+        let cancelled = false;
+        (async () => {
+            try {
+                const list = (await offlineGet("/previousimages", { well_id })).data.ImageList;
+                const results = await Promise.all(
+                    list.map(async (img) => {
+                        const g = await offlineGet("/GetImage", { image_id: img.image_id });
+                        return { imageDate: img.im_datecollected, imageID: img.image_id, imageType: g.data.Image[0].im_type };
+                    })
+                );
+                if (!cancelled) setImages(results);
+            } catch (e) {
+                console.warn(e);
             }
-            listElements = generateListElements(
-                previousImages,
-                well_id,
-                wellName,
-                wellcode,
-            );
-            setLoading(false);
-        });
-    }, [wellName, well_id, wellcode]);
+            if (!cancelled) setLoading(false);
+        })();
+        return () => { cancelled = true; };
+    }, [well_id]);
 
     if (isLoading)
     {
@@ -123,7 +105,7 @@ export default function PreviousImages()
             <br/>
             <h2>{wellName}: Previously Uploaded Images</h2>
             <br/>
-            {listElements}
+            {generateListElements(images, well_id, wellName, wellcode)}
             <List.Item>
                 <List.Content>
                     <br/>

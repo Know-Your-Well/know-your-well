@@ -679,6 +679,43 @@ app.get("/Wells", async (req, res, next) => {
   });
 });
 
+app.get("/offlineSnapshot", async (req, res) => {
+  console.log("knowyourwell/knowyourwell/index.js --> /offlineSnapshot")
+  const school = parseInt(req.session.kywmem, 10);
+  if (isNaN(school)) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+  const run = (q) => {
+    const request = appPool.request();
+    request.input("school", sql.Int, school);
+    return request.query(q);
+  };
+  const wells = "SELECT well_id FROM dbo.tblWellInfo WHERE school_id = @school";
+  try {
+    const [w, fa, cl, wsl, im] = await Promise.all([
+      run("SELECT * FROM dbo.tblWellInfo WHERE school_id = @school"),
+      run(`SELECT * FROM dbo.tblFieldActivity WHERE well_id IN (${wells})`),
+      run(`SELECT cl.* FROM dbo.tblClassroomLab cl
+           JOIN dbo.tblFieldActivity fa ON cl.fieldactivity_id = fa.fieldactivity_id
+           WHERE fa.well_id IN (${wells})`),
+      run(`SELECT wsl.* FROM dbo.tblWaterScienceLab wsl
+           JOIN dbo.tblFieldActivity fa ON wsl.fieldactivity_id = fa.fieldactivity_id
+           WHERE fa.well_id IN (${wells})`),
+      run(`SELECT * FROM dbo.tblImage WHERE well_id IN (${wells})`),
+    ]);
+    res.status(200).json({
+      Wells: w.recordset,
+      FieldActivities: fa.recordset,
+      ClassLabs: cl.recordset,
+      WaterScienceLabs: wsl.recordset,
+      Images: im.recordset,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Snapshot failed.");
+  }
+});
+
 app.get("/csvqueries", async (req, res) => {
   const kywmemValue = req.session.kywmem;
 
@@ -1410,7 +1447,7 @@ app.post("/saml/acs", async (req, res) => {
     req.session.displayName = displayName;
 
     console.log("kywmem Value: ", kywmemValue);
-    console.log(" displayName Value: ", displayName);
+    console.log("displayName Value: ", displayName);
   });
   res.redirect("/Well");
 });
