@@ -10,9 +10,7 @@ const cors = require("cors");
 const path = require("path");
 
 const assignEntity = require("./middleware/saml.js");
-const createRoutes = require("./index.js");
-const createHealthRouter = require("./routes/health.js");
-const createLandFeaturesRouter = require("./routes/landFeatures.js");
+const createApiRouter = require("./routes/index.js");
 
 function createApp({ pool, sqlClient } = {}) {
   if (!pool) {
@@ -34,9 +32,7 @@ function createApp({ pool, sqlClient } = {}) {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(assignEntity);
-  app.use(createHealthRouter());
-  app.use(createLandFeaturesRouter({ pool, sqlClient }));
-  app.use(createRoutes({ pool, sqlClient }));
+  app.use(createApiRouter({ pool, sqlClient }));
 
   const webRoot = path.resolve(__dirname, "wwwroot");
   app.use(express.static(webRoot));
