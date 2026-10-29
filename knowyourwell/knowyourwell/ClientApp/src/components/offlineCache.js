@@ -1,6 +1,7 @@
 import Axios from "axios";
 
-const SAS_TOKEN = "PASTE the sasToken string from viewimage.js here";
+const SAS_TOKEN =
+    "sv=2022-11-02&ss=b&srt=o&sp=r&se=3000-01-01T00:25:47Z&st=2022-01-01T16:25:47Z&spr=https&sig=Y4R081nDtDn2wdhA5G5ryp6BPzxBQq1gUMS5S7FiEH4%3D";
 
 export const azureImageUrl = (well_id, filename) =>
     `https://knowyourwell.blob.core.windows.net/well-images-${well_id}/${filename}?${SAS_TOKEN}`;
