@@ -18,7 +18,7 @@ const fieldPrompts = [
     dependsOn: "wellcover",
     conditions: ["Observable Opening", "Damaged"],
     type: "longtextentry",
-    fieldTitle: "Well Cover Description",
+    fieldTitle: "Wellselection Cover Description",
     value: "wellcoverdescription",
     id: "fa_wellcoverdescription",
   },

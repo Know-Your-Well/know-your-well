@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, waitFor, screen, fireEvent, act } from '@testing-library/react';
-import Well from '../well';
+import Wellselection from '../wellselection';
 import Axios from 'axios';
 import { MemoryRouter, Router, Routes, Route } from 'react-router-dom';
 import '@testing-library/jest-dom';
@@ -23,7 +23,7 @@ const sampleWells = {
     {
       well_id: 1,
       wi_wellcode: 'UNL001',
-      wi_wellname: 'Alpha Well',
+      wi_wellname: 'Alpha Wellselection',
       wi_estlatitude: 40.0,
       wi_estlongitude: -96.0,
       wi_well_owner: 'Owner A',
@@ -36,7 +36,7 @@ const sampleWells = {
     {
       well_id: 2,
       wi_wellcode: 'UNL002',
-      wi_wellname: 'Beta Well',
+      wi_wellname: 'Beta Wellselection',
       wi_estlatitude: 41.0,
       wi_estlongitude: -97.0,
       wi_well_owner: 'Owner B',
@@ -49,7 +49,7 @@ const sampleWells = {
     {
       well_id: 3,
       wi_wellcode: 'UNL003',
-      wi_wellname: 'Charlie Well',
+      wi_wellname: 'Charlie Wellselection',
       wi_estlatitude: 42.0,
       wi_estlongitude: -98.0,
       wi_well_owner: 'Owner C',
@@ -70,7 +70,7 @@ const renderWellWithContext = () => {
   return render(
     <MemoryRouter>
       <WellFieldLabContext.Provider value={mockedWellFieldLabContext}>
-        <Well />
+        <Wellselection />
       </WellFieldLabContext.Provider>
     </MemoryRouter>
   );
@@ -82,7 +82,7 @@ beforeEach(() => {
   sessionStorage.removeItem("tabIndex");
 });
 
-describe('Geographic Map Interface in Well Component', () => {
+describe('Geographic Map Interface in Wellselection Component', () => {
   test('renders the map interface', async () => {
     sessionStorage.setItem("tabIndex", "0");
     localStorage.setItem('wellData', JSON.stringify(sampleWells));
@@ -163,7 +163,7 @@ describe('Geographic Map Interface in Well Component', () => {
     expect(sessionStorage.getItem("showSatellite")).toBe("true");
   });
 
-  test('the Create New Well button has the correct href', async () => {
+  test('the Create New Wellselection button has the correct href', async () => {
     sessionStorage.setItem("tabIndex", "0");
     localStorage.setItem('wellData', JSON.stringify(sampleWells));
   
@@ -184,11 +184,11 @@ describe('Geographic Map Interface in Well Component', () => {
             path="/" 
             element={
               <WellFieldLabContext.Provider value={mockedWellFieldLabContext}>
-                <Well />
+                <Wellselection />
               </WellFieldLabContext.Provider>
             }
           />
-          <Route path="/WellInfo" element={<div>Create Well Page</div>} />
+          <Route path="/WellInfo" element={<div>Create Wellselection Page</div>} />
         </Routes>
       </Router>
     );
@@ -197,7 +197,7 @@ describe('Geographic Map Interface in Well Component', () => {
       expect(document.getElementById('map-container')).toBeInTheDocument();
     });
   
-    const createWellButton = screen.getByText("Create New Well");
+    const createWellButton = screen.getByText("Create New Wellselection");
     expect(createWellButton).toBeInTheDocument();
     expect(createWellButton.tagName).toBe("A");
     expect(createWellButton).toHaveAttribute("href", "/WellInfo");
@@ -243,7 +243,7 @@ describe('Geographic Map Interface in Well Component', () => {
   });
 });
 
-describe('Well Filtering & Sorting', () => {
+describe('Wellselection Filtering & Sorting', () => {
   test('filters wells by radius from user location', async () => {
     sessionStorage.setItem("tabIndex", "0");
     const mockGeolocation = {
@@ -261,14 +261,14 @@ describe('Well Filtering & Sorting', () => {
         {
           well_id: 1,
           wi_wellcode: 'UNL001',
-          wi_wellname: 'Near Well',
+          wi_wellname: 'Near Wellselection',
           wi_estlatitude: 40.8302,
           wi_estlongitude: -96.7105,
         },
         {
           well_id: 2,
           wi_wellcode: 'UNL002',
-          wi_wellname: 'Far Well',
+          wi_wellname: 'Far Wellselection',
           wi_estlatitude: 41.8202,
           wi_estlongitude: -96.7005,
         }
@@ -335,7 +335,7 @@ describe('Well Filtering & Sorting', () => {
     renderWellWithContext();
   
     await waitFor(() => {
-      expect(screen.getByText(/Alpha Well/i)).toBeInTheDocument();
+      expect(screen.getByText(/Alpha Wellselection/i)).toBeInTheDocument();
     });
   
     fireEvent.click(screen.getByText("List View"));
@@ -350,9 +350,9 @@ describe('Well Filtering & Sorting', () => {
     fireEvent.change(searchInput, { target: { value: "Alpha" } });
   
     await waitFor(() => {
-      expect(screen.getByText(/Alpha Well/i)).toBeInTheDocument();
-      expect(screen.queryByText(/Beta Well/i)).toBeNull();
-      expect(screen.queryByText(/Charlie Well/i)).toBeNull();
+      expect(screen.getByText(/Alpha Wellselection/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Beta Wellselection/i)).toBeNull();
+      expect(screen.queryByText(/Charlie Wellselection/i)).toBeNull();
     });
   });
 
@@ -363,14 +363,14 @@ describe('Well Filtering & Sorting', () => {
         {
           well_id: 1,
           wi_wellcode: 'UNL001',
-          wi_wellname: 'In Bounds Well',
+          wi_wellname: 'In Bounds Wellselection',
           wi_estlatitude: 41.5,
           wi_estlongitude: -96.5,
         },
         {
           well_id: 2,
           wi_wellcode: 'UNL002',
-          wi_wellname: 'Out of Bounds Well',
+          wi_wellname: 'Out of Bounds Wellselection',
           wi_estlatitude: 43.2,
           wi_estlongitude: -98.7,
         }
@@ -446,14 +446,14 @@ describe('Well Filtering & Sorting', () => {
     fireEvent.click(screen.getByText("Sort"));
   
     await waitFor(() => {
-      expect(screen.getByText(/Well Name A-Z/i)).toBeInTheDocument();
+      expect(screen.getByText(/Wellselection Name A-Z/i)).toBeInTheDocument();
     });
   
-    fireEvent.click(screen.getByText(/Well Name A-Z/i));
+    fireEvent.click(screen.getByText(/Wellselection Name A-Z/i));
   
     await waitFor(() => {
       const listItems = screen.getAllByRole('listitem');
-      expect(listItems[1]).toHaveTextContent("Alpha Well");
+      expect(listItems[1]).toHaveTextContent("Alpha Wellselection");
     });
   });
   
@@ -499,7 +499,7 @@ describe('Well Filtering & Sorting', () => {
   
     await waitFor(() => {
       const listItems = screen.getAllByRole('listitem');
-      expect(listItems[1]).toHaveTextContent("Alpha Well");
+      expect(listItems[1]).toHaveTextContent("Alpha Wellselection");
     });
   });
   
@@ -544,7 +544,7 @@ describe('Well Filtering & Sorting', () => {
   
     await waitFor(() => {
       const listItems = screen.getAllByRole('listitem');
-      expect(listItems[1]).toHaveTextContent("Charlie Well");
+      expect(listItems[1]).toHaveTextContent("Charlie Wellselection");
     });
   });
   
@@ -587,9 +587,9 @@ describe('Well Filtering & Sorting', () => {
     
     await waitFor(() => {
       const listItems = screen.getAllByRole('listitem');
-      expect(listItems[1]).toHaveTextContent("Charlie Well");
-      expect(listItems[2]).toHaveTextContent("Beta Well");
-      expect(listItems[3]).toHaveTextContent("Alpha Well");
+      expect(listItems[1]).toHaveTextContent("Charlie Wellselection");
+      expect(listItems[2]).toHaveTextContent("Beta Wellselection");
+      expect(listItems[3]).toHaveTextContent("Alpha Wellselection");
     });
   });
   
@@ -735,9 +735,9 @@ describe('Well Filtering & Sorting', () => {
     await waitFor(() => {
       const listItems = screen.getAllByRole('listitem');
       expect(listItems.length).toBe(2);
-      expect(listItems[1]).toHaveTextContent("Alpha Well");
-      expect(screen.queryByText(/Beta Well/i)).toBeNull();
-      expect(screen.queryByText(/Charlie Well/i)).toBeNull();
+      expect(listItems[1]).toHaveTextContent("Alpha Wellselection");
+      expect(screen.queryByText(/Beta Wellselection/i)).toBeNull();
+      expect(screen.queryByText(/Charlie Wellselection/i)).toBeNull();
     });
   });
   
@@ -790,9 +790,9 @@ describe('Well Filtering & Sorting', () => {
     await waitFor(() => {
       const listItems = screen.getAllByRole('listitem');
       expect(listItems.length).toBe(sampleWells.Wells.length + 1);
-      expect(screen.getByText(/Alpha Well/i)).toBeInTheDocument();
-      expect(screen.getByText(/Beta Well/i)).toBeInTheDocument();
-      expect(screen.getByText(/Charlie Well/i)).toBeInTheDocument();
+      expect(screen.getByText(/Alpha Wellselection/i)).toBeInTheDocument();
+      expect(screen.getByText(/Beta Wellselection/i)).toBeInTheDocument();
+      expect(screen.getByText(/Charlie Wellselection/i)).toBeInTheDocument();
     });
   });
   
@@ -865,7 +865,7 @@ describe('Well Filtering & Sorting', () => {
   
     renderWellWithContext();
   
-    await waitFor(() => expect(screen.getByText(/Alpha Well/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText(/Alpha Wellselection/i)).toBeInTheDocument());
   
     fireEvent.click(screen.getByText("List View"));
   
@@ -882,9 +882,9 @@ describe('Well Filtering & Sorting', () => {
     });
   
     await waitFor(() => {
-      expect(screen.getByText(/Alpha Well/i)).toBeInTheDocument();
-      expect(screen.queryByText(/Beta Well/i)).toBeNull();
-      expect(screen.queryByText(/Charlie Well/i)).toBeNull();
+      expect(screen.getByText(/Alpha Wellselection/i)).toBeInTheDocument();
+      expect(screen.queryByText(/Beta Wellselection/i)).toBeNull();
+      expect(screen.queryByText(/Charlie Wellselection/i)).toBeNull();
     });
   });
 
@@ -1001,18 +1001,18 @@ describe('Well Filtering & Sorting', () => {
     fireEvent.click(screen.getByText("Sort"));
 
     await waitFor(() => {
-      expect(screen.getByText(/Well Name A-Z/i)).toBeInTheDocument();
+      expect(screen.getByText(/Wellselection Name A-Z/i)).toBeInTheDocument();
     });
-    const sortOption = screen.getByText(/Well Name A-Z/i);
+    const sortOption = screen.getByText(/Wellselection Name A-Z/i);
     fireEvent.click(sortOption);
 
     expect(sortOption).toHaveStyle({ backgroundColor: 'lightblue' });
 
     await waitFor(() => {
       const listItems = screen.getAllByRole('listitem');
-      expect(listItems[1]).toHaveTextContent("Alpha Well");
-      expect(listItems[2]).toHaveTextContent("Beta Well");
-      expect(listItems[3]).toHaveTextContent("Charlie Well");
+      expect(listItems[1]).toHaveTextContent("Alpha Wellselection");
+      expect(listItems[2]).toHaveTextContent("Beta Wellselection");
+      expect(listItems[3]).toHaveTextContent("Charlie Wellselection");
     });
 
     const newSortOption = screen.getByText(/Newest First/i);

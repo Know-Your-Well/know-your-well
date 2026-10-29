@@ -12,7 +12,7 @@ let formElements = [];
 const nameMap = {
   "fa_weather": "Conditions: Weather, temperature, or anything note-worthy the well:",
   "fa_wellcovercondition": "Condition of the well cover:",
-  "fa_wellcoverdescription": "Well Cover Description:",
+  "fa_wellcoverdescription": "Wellselection Cover Description:",
   "fa_topography": "Topography of the well location:",
   "fa_surfacerunoff": "Evidence of surface run-off entry to the well:",
   "fa_pooling": "Evidence of pooling or puddles within 12 ft of the well:",

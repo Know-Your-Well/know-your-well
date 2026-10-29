@@ -5,7 +5,7 @@ import nrdOptions from "./nrds";
 const wellInfoPrompts = [
   {
     type: "shorttextentry",
-    fieldTitle: "Well Name:",
+    fieldTitle: "Wellselection Name:",
     value: "wellname",
     id: "wi_wellname",
     required: true,
@@ -19,7 +19,7 @@ const wellInfoPrompts = [
   },
   {
     type: "numberentry",
-    fieldTitle: "DNR Well ID:",
+    fieldTitle: "DNR Wellselection ID:",
     value: "dnrId",
     id: "wi_dnrId",
     allowDecimal: false,
@@ -79,7 +79,7 @@ const wellInfoPrompts = [
   },
   {
     type: "shorttextentry",
-    fieldTitle: "Well owner (if different from resident):",
+    fieldTitle: "Wellselection owner (if different from resident):",
     value: "wellowner",
     id: "wi_wellowner",
     required: false,
@@ -105,7 +105,7 @@ const wellInfoPrompts = [
   },
   {
     type: "numberentry",
-    fieldTitle: "Well construction completion year:",
+    fieldTitle: "Wellselection construction completion year:",
     id: "wi_installyear",
     value: "installyear",
     min: "1800",
@@ -237,7 +237,7 @@ const wellInfoPrompts = [
   },
   {
     type: "dropdownentry",
-    fieldTitle: "Well Type (Construction Method):",
+    fieldTitle: "Wellselection Type (Construction Method):",
     id: "wi_welltype",
     options: ["Drilled", "Driven", "Dug", "Unknown"],
     value: "welltype",

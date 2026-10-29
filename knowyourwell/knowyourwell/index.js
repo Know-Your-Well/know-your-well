@@ -12,7 +12,7 @@ const { response } = require("express");
 const path = require("path");
 const { error } = require("console");
 
-//require('dotenv').config()
+require("dotenv").config();
 
 app.use(
   session({
@@ -41,10 +41,18 @@ try {
   const rawData = fs.readFileSync("config.json", "utf8");
   config = JSON.parse(rawData);
 } catch (e) {
+  let database = "kywtestdb";
+  if (process.env.NODE_ENV === "production") {
+    database = "kyw";
+    console.log("Running in production mode. Using production database.");
+  } else {
+    console.log("Not running in production mode. Using test database.");
+  }
+  
   config = {
     user: "kywAdmin",
     password: process.env.APPSETTING_MSSQL_PASSWORD,
-    database: "kyw",
+    database: database,
     server: "kyw.database.windows.net",
     pool: {
       max: 10,

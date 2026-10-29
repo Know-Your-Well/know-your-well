@@ -246,22 +246,22 @@ export default function Field() {
   //     let uploads = "";
   //     if (document.getElementById("wellHead").files.length !== 0) {
   //         let file = document.getElementById("wellHead").files[0]
-  //         await uploadPhoto(file, well_id, "Well " + well_id + " - Well Head" + getExtension(file));
-  //         uploads += "Well Head, ";
+  //         await uploadPhoto(file, well_id, "Wellselection " + well_id + " - Wellselection Head" + getExtension(file));
+  //         uploads += "Wellselection Head, ";
   //     }
   //     if (document.getElementById("cropLand").files.length !== 0) {
   //         let file = document.getElementById("cropLand").files[0];
-  //         await uploadPhoto(file, well_id, "Well " + well_id + " - Crop Land" + getExtension(file));
+  //         await uploadPhoto(file, well_id, "Wellselection " + well_id + " - Crop Land" + getExtension(file));
   //         uploads += "Crop Land, ";
   //     }
   //     if (document.getElementById("barnyardPasture").files.length !== 0) {
   //         let file = document.getElementById("barnyardPasture").files[0]
-  //         await uploadPhoto(file, well_id, "Well " + well_id + " - Barnyard Pasture" + getExtension(file));
+  //         await uploadPhoto(file, well_id, "Wellselection " + well_id + " - Barnyard Pasture" + getExtension(file));
   //         uploads += "Barnyard Pasture, ";
   //     }
   //     if (document.getElementById("septicTank").files.length !== 0) {
   //         let file = document.getElementById("septicTank").files[0];
-  //         await uploadPhoto(file, well_id, "Well " + well_id + " - Septic Tank" + getExtension(file))
+  //         await uploadPhoto(file, well_id, "Wellselection " + well_id + " - Septic Tank" + getExtension(file))
   //         uploads += "Septic Tank, ";
   //     }
   //     alert("Successfully uploaded images for: " + uploads.slice(0, -1) + " to wellid-" + well_id)

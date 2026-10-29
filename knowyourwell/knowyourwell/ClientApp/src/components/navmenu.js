@@ -105,11 +105,11 @@ const NavMenu = () => {
             )}
             <NavItem>
               {user && (
-                <NavLink tag={Link} className="text-dark" to="Well">
-                  Well
+                <NavLink tag={Link} className="text-dark" to="Wellselection">
+                  Wellselection
                 </NavLink>
               )}
-              {/* <NavLink tag={Link} className="text-dark" to="Well">Well</NavLink> */}
+              {/* <NavLink tag={Link} className="text-dark" to="Wellselection">Wellselection</NavLink> */}
             </NavItem>
             <NavItem>
               <NavLink tag={Link} className="text-dark" to="AboutProject">
