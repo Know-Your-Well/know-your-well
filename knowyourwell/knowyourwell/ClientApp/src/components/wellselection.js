@@ -111,6 +111,10 @@ const Wellselection = () => {
   });
   const [mapHeight, setMapHeight] = useState(0);
   const [filterBox, setFilterBox] = useState(null);
+  const [isConcentrationDropdownVisible, setConcentrationDropdownVisibility] =
+    useState(false);
+  const [concentrationBoxState, setConcentrationBox] = useState(null);
+
 
   //credit to https://codewithnico.com/react-wait-axios-to-render/ for conditional rendering
   useEffect(() => {
@@ -242,6 +246,13 @@ const Wellselection = () => {
   // setInterval(() => {
   //   getUserMarker();
   // }, 15000);
+  const getConcentrationFilters = () => {
+    return (
+      <div style={{ padding: "0.5em" }}>
+        <p>Concentration filters go here.</p>
+      </div>
+    );
+  };
 
   const getFilters = () => {
     return (
@@ -391,25 +402,27 @@ const Wellselection = () => {
       x: window.innerWidth - popupWidth - 10,
       y: document.body.getBoundingClientRect().bottom - mapHeight + 96,
     };
+    const concentrationBox = concentrationBoxState ?? { ...box };
     return (
       <>
         <div>
           <button
             onClick={() => {
               setFilterDropdownVisibility(!isFilterDropdownVisible);
+              setConcentrationDropdownVisibility(false);
             }}
             className="btn btn-primary"
             style={{
               height: "38px",
               marginTop: "10px",
               marginRight: "10px",
-              width: "5em",
+              width: "8em",
               position: "absolute",
               zIndex: "1000",
-              right: "0",
+              right: "9em",
             }}
           >
-            Filters
+            Filter Wells
             {hasActiveFilters && (
               <span
                 style={{
@@ -424,6 +437,24 @@ const Wellselection = () => {
               ></span>
             )}
           </button>
+          <button
+            onClick={() => {
+              setConcentrationDropdownVisibility(!isConcentrationDropdownVisible);
+              setFilterDropdownVisibility(false);
+            }}
+            className="btn btn-primary"
+            style={{
+              height: "38px",
+              marginTop: "10px",
+              marginRight: "10px",
+              width: "8em",
+              position: "absolute",
+              zIndex: "1000",
+              right: "0",
+            }}
+          >
+            Concentration
+          </button>
           <a
             href={`/WellInfo`}
             className="btn btn-light btn-block"
@@ -435,7 +466,7 @@ const Wellselection = () => {
               marginRight: "10px",
               position: "absolute",
               zIndex: "1000",
-              right: "6em",
+              right: "18em",
             }}
           >
             Create New Well
@@ -556,6 +587,75 @@ const Wellselection = () => {
               </div>
             </Rnd>
           )}
+          {isConcentrationDropdownVisible && (
+            <Rnd
+              size={{ width: concentrationBox.width, height: concentrationBox.height }}
+              position={{ x: concentrationBox.x, y: concentrationBox.y }}
+              onDragStop={(e, d) => setConcentrationBox({ ...concentrationBox, x: d.x, y: d.y })}
+              onResizeStop={(e, direction, ref, delta, position) =>
+                setConcentrationBox({
+                  width: ref.offsetWidth,
+                  height: ref.offsetHeight,
+                  ...position,
+                })
+              }
+              minWidth={300}
+              minHeight={150}
+              bounds="window"
+              dragHandleClassName="concentration-popup-handle"
+              style={{
+                zIndex: 1001,
+                display: "flex",
+                flexDirection: "column",
+                border: "1px solid #ccc",
+                boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+                boxSizing: "border-box",
+                background: "rgba(255,255,255,0.5)",
+              }}
+            >
+              <div
+                className="concentration-popup-handle bg-primary text-white"
+                style={{
+                  display: "flex",
+                  justifyContent: "space-between",
+                  alignItems: "center",
+                  padding: "4px 8px",
+                  cursor: "move",
+                  userSelect: "none",
+                  flexShrink: 0,
+                }}
+              >
+                <span>Concentration</span>
+                <button
+                  type="button"
+                  aria-label="Close concentration"
+                  onClick={() => setConcentrationDropdownVisibility(false)}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    color: "white",
+                    fontSize: "1.2em",
+                    lineHeight: 1,
+                    cursor: "pointer",
+                  }}
+                >
+                  ✕
+                </button>
+              </div>
+              <div
+                style={{
+                  flex: 1,
+                  overflow: "auto",
+                  overscrollBehavior: "contain",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                }}
+              >
+                {getConcentrationFilters()}
+              </div>
+            </Rnd>
+          )}
         </div>
         <MapContainer
           id="map-container"
@@ -626,11 +726,12 @@ const Wellselection = () => {
             <button
               onClick={() => {
                 setFilterDropdownVisibility(!isFilterDropdownVisible);
+                setConcentrationDropdownVisibility(false);
               }}
               className="btn btn-primary"
-              style={{ margin: "0.5em", width: "5em", position: "relative" }}
+              style={{ margin: "0.5em", width: "8em", position: "relative" }}
             >
-              Filters
+              Filter Wells
               {hasActiveFilters && (
                 <span
                   style={{
@@ -644,6 +745,16 @@ const Wellselection = () => {
                   }}
                 ></span>
               )}
+            </button>
+            <button
+              onClick={() => {
+                setConcentrationDropdownVisibility(!isConcentrationDropdownVisible);
+                setFilterDropdownVisibility(false);
+              }}
+              className="btn btn-primary"
+              style={{ margin: "0.5em", width: "8em" }}
+            >
+              Concentration
             </button>
             {isSortDropdownVisible && (
               <div
@@ -718,6 +829,20 @@ const Wellselection = () => {
                 }}
               >
                 {getFilters()}
+              </div>
+            )}
+            {isConcentrationDropdownVisible && (
+              <div
+                style={{
+                  border: "1px solid #ccc",
+                  marginTop: "10px",
+                  boxShadow: "0 2px 10px rgba(0, 0, 0, 0.1)",
+                  boxSizing: "border-box",
+                  maxHeight: "60vh",
+                  overflow: "auto",
+                }}
+              >
+                {getConcentrationFilters()}
               </div>
             )}
           </div>
