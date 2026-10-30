@@ -11,6 +11,7 @@ import {
   Marker,
   Popup,
   AttributionControl,
+  useMap,
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import markerIconPng from "../components/images/wellIcon.png";
@@ -18,6 +19,38 @@ import { Icon } from "leaflet";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import "./css/wells.css";
+
+import "leaflet.heat";
+// import "leaflet.idw";
+import "./leaflet-idw.js";
+
+function WellsHeatmap({ points }) {
+  const map = useMap();
+
+  useEffect(() => {
+
+    const layer = L.idwLayer(points, {
+      opacity: 0.7,
+      cellSize: 4,
+      exp: 2,
+      max: 200,
+      maxZoom: 12,
+    }).addTo(map);
+
+    const frame = requestAnimationFrame(() => {
+      map.invalidateSize();
+      layer.redraw();
+    });
+
+
+    return () => map.removeLayer(layer);
+  }, [map, points]);
+
+  return null;
+}
+
+
+
 
 function responseDataToHTMLList(responseData) {
   let HTMLList = [];
@@ -110,6 +143,14 @@ const WellSelection = () => {
       return true;
     }
   });
+
+
+  const [showHeat, setShowHeat] = useState(
+    () => sessionStorage.getItem("showHeat") === "true"
+  );
+
+
+
   const [mapHeight, setMapHeight] = useState(0);
 
   //credit to https://codewithnico.com/react-wait-axios-to-render/ for conditional rendering
@@ -379,6 +420,42 @@ const WellSelection = () => {
     );
   };
 
+
+
+
+
+
+
+
+
+  const getHeatPoints = () => {
+  const wells = JSON.parse(localStorage.getItem("wellData") || '{"Wells":[]}').Wells || [];
+
+
+  return wells
+    .filter((well) =>
+      well.wi_estlatitude != null &&
+      well.wi_estlongitude != null &&
+      Number.isFinite(Number(well.wi_estlatitude)) &&
+      Number.isFinite(Number(well.wi_estlongitude))
+    )
+    .map((well) => [
+      Number(well.wi_estlatitude),
+      Number(well.wi_estlongitude),
+      Number(well.wi_waterleveldepth),
+      // Number(well.wi_totaldepth),
+    ]);
+  };
+
+
+
+
+
+
+
+
+
+
   const getMapView = () => {
     const hasActiveFilters = Object.entries(filter).some(
       ([, value]) =>
@@ -483,6 +560,58 @@ const WellSelection = () => {
                 width: "3em",
               }}
             />
+            
+
+
+
+
+            <label
+              for="heatToggle"
+              style={{
+                fontSize: "1em",
+                margin: "0px 5px",
+                color: "black",
+                width: "12em",
+              }}
+            >
+              Show Interpolated Layer
+            </label>
+            <input
+              type="checkbox"
+              id="heatToggle"
+              name="heatToggle"
+              checked={showHeat}
+              onChange={(e) => {
+                const enabled = e.target.checked;
+                sessionStorage.setItem("showHeat", String(enabled));
+                setShowHeat(enabled);
+              }}
+              style={{ height: "24px", padding: "0", margin: "0", width: "3em" }}
+            />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           </div>
           {isFilterDropdownVisible && (
             <div
@@ -538,6 +667,7 @@ const WellSelection = () => {
               opacity={0.5}
             />
           )}
+          {showHeat && <WellsHeatmap points={getHeatPoints()} />}
           {responseDataToMarkerList(
             JSON.parse(localStorage.getItem("wellData"))?.Wells
           )}
@@ -745,7 +875,7 @@ const WellSelection = () => {
             setTabIndex(index);
             sessionStorage.setItem("tabIndex", index.toString());
           }}
-          style={{ height: `${mapHeight}px` }}
+          style={{ height: `${Math.max(mapHeight, 400)}px` }}
         >
           <TabList>
             <Tab>Map View</Tab>

@@ -28,6 +28,8 @@
     "jspdf": "^4.2.1",
     "jspdf-autotable": "^5.0.9",
     "leaflet": "^1.9.4",
+    "leaflet.heat": "^0.2.0",
+    "leaflet.idw": "^0.0.1",
     "merge": "^2.1.1",
     "mocha": "^10.2.0",
     "moment": "^2.29.4",
