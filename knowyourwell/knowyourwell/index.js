@@ -60,8 +60,8 @@ try {
       idleTimeoutMillis: 30000,
     },
     options: {
-      encrypt: false, // 'true' for azure
-      trustServerCertificate: true, // change to true for local dev / self-signed certs
+      encrypt: true, // 'true' for azure
+      trustServerCertificate: false, // change to true for local dev / self-signed certs
     },
   };
   console.log("Using database:", config.database, "on", config.server);

@@ -23,7 +23,7 @@ you need 2 terminals open for this. so do that please.
 2. ```knowyourwell/knowyourwell/Properties/launchSettings.json```
    1. if you're on vscode then this is important you have to know what's happening.
    2. I'm not on VScode. i'm on webstorm. ignore this if you are on webstorm.
-3. ```knowyourwell/knowyourwell/ClientApp/src/setupProxy.js```
+3. ```../knowyourwell/knowyourwell/ClientApp/src/setupProxy.js```
    1. this contains a port number setting 
 
 ### commands you must know
