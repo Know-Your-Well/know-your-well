@@ -14,7 +14,10 @@ const { getDatabaseConfig } = require("./config/database.js");
 async function startServer() {
   const pool = new sql.ConnectionPool(getDatabaseConfig());
   const app = createApp({ pool, sqlClient: sql });
-  const port = Number(process.env.PORT) || 7193;
+  // IISNode may provide PORT as a named-pipe path rather than a numeric port.
+  // Preserve the value as-is; coercing it to Number makes it NaN and silently
+  // binds Express to 7193, where IISNode is not listening.
+  const port = process.env.PORT || 7193;
   const server = app.listen(port, () => {
     console.log(`API server is running on port ${port}.`);
   });

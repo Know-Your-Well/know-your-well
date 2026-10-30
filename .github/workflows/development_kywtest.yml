@@ -57,3 +57,26 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_B107C49BF98E4120BB3AEFE95F760912 }}
           package: .
+
+      - name: Verify API endpoints
+        shell: pwsh
+        run: |
+          $baseUrl = "https://kywtest.azurewebsites.net"
+          $lastError = $null
+          for ($attempt = 1; $attempt -le 12; $attempt++) {
+            try {
+              $heartbeat = Invoke-WebRequest -Uri "$baseUrl/heartbeat" -UseBasicParsing -TimeoutSec 20
+              $devSession = Invoke-WebRequest -Uri "$baseUrl/createDevSession" -UseBasicParsing -TimeoutSec 20
+              if ($heartbeat.StatusCode -eq 200 -and $devSession.StatusCode -eq 200 -and $devSession.Content -match '"success":"success"') {
+                Write-Host "Heartbeat and development login endpoints are healthy."
+                exit 0
+              }
+              $lastError = "Unexpected response: heartbeat=$($heartbeat.StatusCode), dev session=$($devSession.StatusCode)."
+            }
+            catch {
+              $lastError = $_.Exception.Message
+            }
+            Write-Host "API not ready (attempt $attempt/12): $lastError"
+            Start-Sleep -Seconds 10
+          }
+          throw "Deployment did not serve its API endpoints after 12 attempts. Last error: $lastError"
