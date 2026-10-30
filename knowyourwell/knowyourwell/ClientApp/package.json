@@ -22,7 +22,7 @@
     "fake-indexeddb": "^6.0.0",
     "fs": "^0.0.1-security",
     "gh-pages": "^4.0.0",
-    "http-proxy-middleware": "^2.0.6",
+    "http-proxy-middleware": "^4.2.0",
     "idb": "^8.0.2",
     "jquery": "^3.6.0",
     "jspdf": "^4.2.1",
@@ -95,7 +95,9 @@
     "build": "set \"CI=false\" && react-scripts build",
     "test": "cross-env CI=true react-scripts test --env=jsdom --watch",
     "eject": "react-scripts eject",
-    "lint": "eslint ./src/"
+    "lint": "eslint ./src/",
+    "serve": "node serve-build.js",
+    "offline-run" : "npm run build && node serve-build.js"
   },
   "eslintConfig": {
     "extends": [

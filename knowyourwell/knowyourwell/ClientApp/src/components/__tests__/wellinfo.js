@@ -5,7 +5,7 @@
 import React from "react";
 import "@testing-library/jest-dom";
 import axios from "axios";
-import WellInfo, { generateWellcode } from "../wellinfo";
+import WellInfo, { generateWellCode } from "../wellinfo";
 
 
 jest.mock('axios');
@@ -18,7 +18,7 @@ describe("the function that generates the well code", () => {
         },
     });
 
-    const testCode = await generateWellcode();
+    const testCode = await generateWellCode();
     expect(testCode).toEqual("UNL001");
   });
 });

@@ -13,6 +13,7 @@ import { Link } from "react-router-dom";
 import "./css/NavMenu.css";
 
 import { useUser } from "./usercontext";
+import { syncSnapshot, clearOfflineData } from "./offlineCache";
 
 const NavMenu = () => {
   const [collapsed, setCollapsed] = useState(true);
@@ -50,10 +51,15 @@ const NavMenu = () => {
     validateUser();
   }, [navigate, user, setUser]);
 
+  useEffect(() => {
+    if (user?.kywmem) {
+      syncSnapshot().catch((e) => console.warn("Offline sync failed", e));
+    }
+  }, [user]);
+
   const initLogout = async () => {
-    await Axios.get("/logout", {
-      responseType: "json",
-    });
+    await clearOfflineData();
+    await Axios.get("/logout", { responseType: "json" });
     window.location.href = "/";
   };
 
@@ -105,11 +111,11 @@ const NavMenu = () => {
             )}
             <NavItem>
               {user && (
-                <NavLink tag={Link} className="text-dark" to="Wellselection">
-                  Wellselection
+                <NavLink tag={Link} className="text-dark" to="Well">
+                  Well
                 </NavLink>
               )}
-              {/* <NavLink tag={Link} className="text-dark" to="Wellselection">Wellselection</NavLink> */}
+              {/* <NavLink tag={Link} className="text-dark" to="Welln">Welln</NavLink> */}
             </NavItem>
             <NavItem>
               <NavLink tag={Link} className="text-dark" to="AboutProject">

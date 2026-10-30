@@ -5,7 +5,7 @@ import nrdOptions from "./nrds";
 const wellInfoPrompts = [
   {
     type: "shorttextentry",
-    fieldTitle: "Wellselection Name:",
+    fieldTitle: "Well Name:",
     value: "wellname",
     id: "wi_wellname",
     required: true,
@@ -19,7 +19,7 @@ const wellInfoPrompts = [
   },
   {
     type: "numberentry",
-    fieldTitle: "DNR Wellselection ID:",
+    fieldTitle: "DNR Well ID:",
     value: "dnrId",
     id: "wi_dnrId",
     allowDecimal: false,
@@ -79,7 +79,7 @@ const wellInfoPrompts = [
   },
   {
     type: "shorttextentry",
-    fieldTitle: "Wellselection owner (if different from resident):",
+    fieldTitle: "Well owner (if different from resident):",
     value: "wellowner",
     id: "wi_wellowner",
     required: false,
@@ -99,13 +99,13 @@ const wellInfoPrompts = [
     id: "wi_email",
     value: "email",
     errorMessage: "Invalid email address format",
-    pattern: "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+.[a-zA-Z]{2,}$",
+    pattern: "^[a-zA-Z0-9._%+\\-]+@[a-zA-Z0-9.\\-]+\\.[a-zA-Z]{2,}$",
     title:
       "Please enter a valid email address in the format example@example.com",
   },
   {
     type: "numberentry",
-    fieldTitle: "Wellselection construction completion year:",
+    fieldTitle: "Well construction completion year:",
     id: "wi_installyear",
     value: "installyear",
     min: "1800",
@@ -237,7 +237,7 @@ const wellInfoPrompts = [
   },
   {
     type: "dropdownentry",
-    fieldTitle: "Wellselection Type (Construction Method):",
+    fieldTitle: "Well Type (Construction Method):",
     id: "wi_welltype",
     options: ["Drilled", "Driven", "Dug", "Unknown"],
     value: "welltype",

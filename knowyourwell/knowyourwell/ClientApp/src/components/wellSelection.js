@@ -77,7 +77,7 @@ function responseDataToMarkerList(responseData) {
   return markerList;
 }
 
-const Wellselection = () => {
+const WellSelection = () => {
   const [isLoading, setLoading] = useState(true);
   const [isSortDropdownVisible, setSortDropdownVisibility] = useState(false);
   const [isFilterDropdownVisible, setFilterDropdownVisibility] =
@@ -448,7 +448,7 @@ const Wellselection = () => {
             }}
           >
             <label
-              for="satelliteToggle"
+              htmlFor="satelliteToggle"
               style={{
                 fontSize: "1em",
                 margin: "0px 5px",
@@ -740,4 +740,4 @@ const Wellselection = () => {
   }
 };
 
-export default Wellselection;
+export default WellSelection;

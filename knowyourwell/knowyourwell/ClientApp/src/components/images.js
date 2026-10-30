@@ -3,7 +3,7 @@ import Axios from "axios";
 import { useSearchParams } from "react-router-dom";
 import DatePicker from "react-datetime";
 import NumberEntry from "./reusable/numberentry";
-import FormFooter from "./reusable/formfooter";
+import FormFooterReactElement from "./reusable/formFooterReactElement";
 import uploadPhoto from "./reusable/photoUpload";
 import imagePrompts from "./resources/imageprompts";
 import renderField from "./reusable/renderfield";
@@ -274,12 +274,12 @@ export default function Images() {
               {"  "}
             </div>
           </div>
-          <FormFooter submitForm={submitForm} backButton={backButton} saveEnabled={false} />
+          <FormFooterReactElement submitForm={submitForm} backButton={backButton} saveEnabled={false} />
         </div>
       ) : (
         <div>
           <br />
-          <FormFooter backButton={backButton} saveEnabled={false} submitEnabled={false} />
+          <FormFooterReactElement backButton={backButton} saveEnabled={false} submitEnabled={false} />
         </div>
       )}
     </form>

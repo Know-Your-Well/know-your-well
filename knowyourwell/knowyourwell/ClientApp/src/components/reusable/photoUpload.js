@@ -35,7 +35,7 @@ export default async function uploadPhoto(file, containerName, blobName, metadat
       metadata: metadata,
     });
   } catch (err) {
-    console.log(`Error: ${err.message}`);
+    console.log(`knowyourwell/knowyourwell/ClientApp/src/components/reusable/photoUpload.js --> uploadPhoto --> Error: ${err.message}`);
     throw err;
   }
 }

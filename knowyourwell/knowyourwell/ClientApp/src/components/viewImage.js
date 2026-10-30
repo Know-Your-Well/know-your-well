@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
 import "./css/forms.css";
-import Axios from "axios";
 import moment from "moment";
 import { useSearchParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "./usercontext";
+import {getImageSrc, offlineGet} from "./offlineCache";
 
 const nameMap = {
   "im_type": "Image Type:",
@@ -25,6 +25,7 @@ const imageInfo = [
 let formElements = [];
 
 export default function ViewImage() {
+  console.log("knowyourwell/knowyourwell/ClientApp/src/components/viewImage.js --> ViewImage")
   const [searchParams] = useSearchParams();
   const image_id = parseInt(searchParams.get("image_id"));
   const wellName = searchParams.get("wellName");
@@ -46,20 +47,10 @@ export default function ViewImage() {
 
   const [isLoading, setLoading] = useState(true);
   useEffect(() => {
-    Axios.get("/GetImage", {
-      responseType: "json",
-      params: {
-        image_id: image_id,
-      },
-    }).then(async (response) => {
-      try {
-        const sasToken =
-          "sv=2022-11-02&ss=b&srt=o&sp=r&se=3000-01-01T00:25:47Z&st=2022-01-01T16:25:47Z&spr=https&sig=Y4R081nDtDn2wdhA5G5ryp6BPzxBQq1gUMS5S7FiEH4%3D";
-        const azureUrl = `https://knowyourwell.blob.core.windows.net/well-images-${well_id}/${response.data.Image[0].im_filename}?${sasToken}`;
-        formElements = { azureUrl, ...response.data.Image[0] };
-      } catch (error) {
-        console.log(error);
-      }
+    offlineGet("/GetImage", { image_id }).then(async (response) => {
+      const img = response.data.Image[0];
+      const azureUrl = await getImageSrc(well_id, img.im_filename);
+      formElements = { azureUrl, ...img };
       setLoading(false);
     });
   }, [well_id, image_id]);

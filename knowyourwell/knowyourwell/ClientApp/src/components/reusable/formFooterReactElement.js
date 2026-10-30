@@ -1,4 +1,4 @@
-const FormFooter = ({ submitForm, backButton, cacheForm, submitEnabled = true, backEnabled = true, saveEnabled = true }) => {
+const FormFooterReactElement = ({ submitForm: submitFormParameter, backButton, cacheForm, submitEnabled = true, backEnabled = true, saveEnabled = true }) => {
   return (
     <div>
       {backEnabled &&
@@ -26,7 +26,7 @@ const FormFooter = ({ submitForm, backButton, cacheForm, submitEnabled = true, b
           type="button"
           style={{ width: "130px", height: "17%", margin: "8px" }}
           className="btn btn-primary btn-lg"
-          onClick={submitForm}
+          onClick={submitFormParameter}
         >
           Submit
         </button>
@@ -37,4 +37,4 @@ const FormFooter = ({ submitForm, backButton, cacheForm, submitEnabled = true, b
     </div>
   );
 };
-export default FormFooter;
+export default FormFooterReactElement;

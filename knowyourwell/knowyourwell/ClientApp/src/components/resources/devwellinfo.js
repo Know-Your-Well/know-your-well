@@ -34,7 +34,7 @@ const devWellInfo = {
   wellcode: "dev123",
   welldry: "Yes",
   welldrydescription: "Sample well dry description",
-  wellname: "My Awesome Wellselection (dev)",
+  wellname: "My Awesome Well (dev)",
   wellowner: "Sample well owner",
   welltype: "Drilled",
   welluser: "Sample well user",

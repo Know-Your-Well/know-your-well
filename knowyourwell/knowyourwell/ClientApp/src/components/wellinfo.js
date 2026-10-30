@@ -83,7 +83,7 @@ export default function WellInfo() {
 
   function cacheWellInfo() {
     localStorage.setItem("wellInfo", JSON.stringify(wellInfo));
-    alert("Wellselection information has been saved! You can return to edit this later, or can keep working on it.");
+    alert("Well information has been saved! You can return to edit this later, or can keep working on it.");
   }
 
   function clearLocalStorage() {
@@ -99,7 +99,7 @@ export default function WellInfo() {
     // Checking to see if user is offline - if so then we cache the data that would have been submitted
     await Axios.get(`/heartbeat?timestamp=${Date.now()}`)
       .then(async () => {
-        const wellcode = await generateWellcode();
+        const wellcode = await generateWellCode();
         await Axios.post("/createwellinfo", {
           address: wellInfo.address,
           aquiferclass: wellInfo.aquiferclass,
@@ -263,7 +263,7 @@ export default function WellInfo() {
           } else {
             updateWellInfo("waterleveldepth", "");
             alert(
-              "Wellselection water depth cannot be greater than total well depth.",
+              "Well water depth cannot be greater than total well depth.",
             );
           }
         }}
@@ -275,7 +275,7 @@ export default function WellInfo() {
 }
 
 
-export async function generateWellcode() {
+export async function generateWellCode() {
   try {
     const response = await Axios.get("/newwellcode", {});
     return response.data.wellcode;

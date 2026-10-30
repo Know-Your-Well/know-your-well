@@ -11,43 +11,45 @@ import { useUser } from "./usercontext";
 import axios from "axios";
 
 const nameMap = {
-  "wi_wellcode": "Wellselection Code:",
+  "wi_wellcode": "Well Code:",
   "wi_datacollector": "Data Collector:",
-  "wi_dnr_well_id": "DNR Wellselection ID:",
+  "wi_dnr_well_id": "DNR Well ID:",
   "wi_address": "Address:",
   "wi_state": "State:",
   "county_id": "County:",
   "wi_phone_well_user": "Phone # (of well user):",
-  "wi_well_owner": "Wellselection owner (if different from resident):",
+  "wi_well_owner": "Well owner (if different from resident):",
   "wi_smelltaste": "Complaints about smell or taste of water?:",
   "wi_welldry": "Does the well ever go dry?:",
   "wi_maintenance5yr": "Maintenance done to the well itself within the last five years:",
-  "wi_numberwelluser": "Number of Wellselection Users:",
+  "wi_numberwelluser": "Number of Well Users:",
   "wi_estlatitude": "Estimated Latitude:",
   "wi_boreholediameter": "Bore hole diameter (inches):",
   "wi_waterleveldepth": "Water level (feet):",
   "wi_aquiferclass": "Aquifer Class:",
-  "wi_wellcasematerial": "Wellselection Casing Material:",
-  "wi_wellname": "Wellselection Name:",
-  "wi_registration_number": "Wellselection Registration Number:",
-  "wi_well_user": "Name of Resident Wellselection User:",
+  "wi_wellcasematerial": "Well Casing Material:",
+  "wi_wellname": "Well Name:",
+  "wi_registration_number": "Well Registration Number:",
+  "wi_well_user": "Name of Resident Well User:",
   "wi_city": "Village, Town, or City:",
   "wi_zipcode": "Zip code:",
   "nrd_id": "NRD:",
   "wi_email_well_user": "Email (of well user):",
-  "wi_installyear": "Wellselection construction completion year:",
-  "wi_smelltaste_description": "Smell or taste of water desciption:",
+  "wi_installyear": "Well construction completion year:",
+  "wi_smelltaste_description": "Smell or taste of water description:",
   "wi_welldry_description": "When well goes dry:",
   "wi_landuse5yr": "Major land use / development changes around the well within the last five years?:",
   "wi_pestmanure": "Manure, fertilizer, or pesticides been applied the well within the last five years:",
   "wi_estlongitude": "Estimated Longitude:",
   "wi_totaldepth": "Total depth of well (feet):",
   "wi_aquifertype": "Aquifer Type:",
-  "wi_welltype": "Wellselection Type (Construction Method):",
+  "wi_welltype": "Well Type (Construction Method):",
   "wi_observation": "Observations:"
 };
 
 export default function ViewWell() {
+  console.log("knowyourwell/knowyourwell/ClientApp/src/components/viewwell.js --> ViewWell")
+
   const [searchParams] = useSearchParams();
   const well_id = parseInt(searchParams.get("id"));
   const wellName = searchParams.get("wellName");
@@ -164,7 +166,8 @@ export default function ViewWell() {
 
   let columnList = [];
 
-  if (formElements) {
+  if (formElements)
+  {
     formElements["county_id"] = countyOptions.find(
       (option) => option.key === formElements["county_id"].toString(),
     ).value;
@@ -220,13 +223,15 @@ export default function ViewWell() {
     const basicInfoList = ['Basic Info', ...basicInfo.map((key) => [key, formElements[key]])];
     const locationInfoList = ['Location Info', ...locationInfo.map((key) => [key, formElements[key]])];
     const contactInfoList = ['Contact Info', ...contactInfo.map((key) => [key, formElements[key]])];
-    const wellInfoList = ['Wellselection Info', ...wellInfo.map((key) => [key, formElements[key]])];
+    const wellInfoList = ['Well Info', ...wellInfo.map((key) => [key, formElements[key]])];
 
-    for (const i of [basicInfoList, locationInfoList, contactInfoList, wellInfoList]) {
-      const summaryName = i[0];
-      const fields = i.slice(1);
+    // rotating_list swaps between the 4 arrays in this for loop. It is not a index.
+    //     The console.log calls this a array. It's a list, it is flexible data type and size.
+    for (const rotating_list of [basicInfoList, locationInfoList, contactInfoList, wellInfoList]) {
+      const summaryName = rotating_list[0];
+      const fields = rotating_list.slice(1);
       columnList.push(
-        <>
+        <React.Fragment key={summaryName}>
           <details key={summaryName} style={{ marginTop: "2px", alignItems: "center" }}>
             <summary style={{ textAlign: "left", fontSize: "1.25em", background: "#686868", padding: "2px 8px", color: "white" }}><b>{summaryName}</b></summary>
             {
@@ -256,75 +261,79 @@ export default function ViewWell() {
             }
           </details>
           <br />
-        </>,
+        </React.Fragment>,
       );
     }
 
-    return (
-      <div className="css">
-        <h2>
-          {" "}
-          {wellcode}: {wellName}: Well Info
-        </h2>
-        <br />
-        <div className="container" style={{ textAlign: "center" }}>
-          {columnList}
-          <div key="datacollector" className="row">
-            <div className="col">
-              <p style={{ textAlign: "center" }}>
-                <b>Data Collector:</b>{" "}
-                {formElements["wi_datacollector"]}
-              </p>
-            </div>
-          </div>
-          <div key="dateentered" className="row">
-            <div className="col">
-              <p style={{ textAlign: "center" }}>
-                <b>Date Entered:</b>{" "}
-                {moment
-                  .utc(formElements["wi_datecollected"])
-                  .local()
-                  .format("MM-DD-YYYY hh:mm A")}
-              </p>
-            </div>
-          </div>
-          {renderLandFeatures()}
+    let returnHTMLElementIfFormElementsIsNotBlank = (
+        <div className="css">
+          <h2>
+            {" "}
+            {wellcode}: {wellName}: Well Info
+          </h2>
           <br />
+          <div className="container" style={{ textAlign: "center" }}>
+            {columnList}
+            <div key="datacollector" className="row">
+              <div className="col">
+                <p style={{ textAlign: "center" }}>
+                  <b>Data Collector:</b>{" "}
+                  {formElements["wi_datacollector"]}
+                </p>
+              </div>
+            </div>
+            <div key="dateentered" className="row">
+              <div className="col">
+                <p style={{ textAlign: "center" }}>
+                  <b>Date Entered:</b>{" "}
+                  {moment
+                      .utc(formElements["wi_datecollected"])
+                      .local()
+                      .format("MM-DD-YYYY hh:mm A")}
+                </p>
+              </div>
+            </div>
+            {renderLandFeatures()}
+            <br />
+            <button
+                type="button"
+                style={{ width: "130px", height: "17%" }}
+                className="btn btn-primary btn-lg"
+                onClick={backButton}
+            >
+              Back
+            </button>
+            <br />
+            <br />
+            <a href="mailto:knowyourwell@unl.edu" style={{ textAlign: "center" }}>
+              If any data is incorrect email us at knowyourwell@unl.edu
+            </a>
+          </div>
+        </div>
+    );
+
+    return returnHTMLElementIfFormElementsIsNotBlank;
+  } else {
+    let returnHTMLElementIfFormElementsIsBlank = (
+        <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+            }}
+        >
+          <h1>The well you're looking for does not exist</h1>
           <button
-            type="button"
-            style={{ width: "130px", height: "17%" }}
-            className="btn btn-primary btn-lg"
-            onClick={backButton}
+              type="button"
+              style={{ width: "180px", height: "17%" }}
+              className="btn btn-primary btn-lg"
+              onClick={backToWellsButton}
           >
             Back
           </button>
-          <br />
-          <br />
-          <a href="mailto:knowyourwell@unl.edu" style={{ textAlign: "center" }}>
-            If any data is incorrect email us at knowyourwell@unl.edu
-          </a>
         </div>
-      </div>
     );
-  } else {
-    return (
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <h1>The well you're looking for does not exist</h1>
-        <button
-          type="button"
-          style={{ width: "180px", height: "17%" }}
-          className="btn btn-primary btn-lg"
-          onClick={backToWellsButton}
-        >
-          Back
-        </button>
-      </div>
-    );
+
+    return returnHTMLElementIfFormElementsIsBlank;
   }
 }

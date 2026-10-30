@@ -60,10 +60,11 @@ try {
       idleTimeoutMillis: 30000,
     },
     options: {
-      encrypt: true, // for azure
-      trustServerCertificate: false, // change to true for local dev / self-signed certs
+      encrypt: false, // 'true' for azure
+      trustServerCertificate: true, // change to true for local dev / self-signed certs
     },
   };
+  console.log("Using database:", config.database, "on", config.server);
 }
 
 const appPool = new sql.ConnectionPool(config);
@@ -598,9 +599,16 @@ app.get("/Wells", async (req, res, next) => {
 
   let applySchoolId = "";
   if (kywmemValue && kywmemValue !== "" && kywmemValue !== "undefined") {
+    /*
+    //claude says having ${kywmemvalue) in the sql string like this is dangerous because it is vulnerable to sql injection attacks.
+    //then something about the session meaning it's low risk.
+    //below is code that could fix this. i'm just doing something else right now.
+    request.input("school", kywmemValue)
+    WHERE school_id = @school
+     */
     applySchoolId = ` WHERE school_id = ${kywmemValue}`;
   } else {
-    next(new Error("No school ID found in session."));
+    return next(new Error("No school ID found in session."));
   }
 
   query += applySchoolId;
@@ -675,6 +683,43 @@ app.get("/Wells", async (req, res, next) => {
     }
     res.status(200).json({ Wells: recordset.recordset });
   });
+});
+
+app.get("/offlineSnapshot", async (req, res) => {
+  console.log("knowyourwell/knowyourwell/index.js --> /offlineSnapshot")
+  const school = parseInt(req.session.kywmem, 10);
+  if (isNaN(school)) {
+    return res.status(401).json({ error: "Not logged in" });
+  }
+  const run = (q) => {
+    const request = appPool.request();
+    request.input("school", sql.Int, school);
+    return request.query(q);
+  };
+  const wells = "SELECT well_id FROM dbo.tblWellInfo WHERE school_id = @school";
+  try {
+    const [w, fa, cl, wsl, im] = await Promise.all([
+      run("SELECT * FROM dbo.tblWellInfo WHERE school_id = @school"),
+      run(`SELECT * FROM dbo.tblFieldActivity WHERE well_id IN (${wells})`),
+      run(`SELECT cl.* FROM dbo.tblClassroomLab cl
+           JOIN dbo.tblFieldActivity fa ON cl.fieldactivity_id = fa.fieldactivity_id
+           WHERE fa.well_id IN (${wells})`),
+      run(`SELECT wsl.* FROM dbo.tblWaterScienceLab wsl
+           JOIN dbo.tblFieldActivity fa ON wsl.fieldactivity_id = fa.fieldactivity_id
+           WHERE fa.well_id IN (${wells})`),
+      run(`SELECT * FROM dbo.tblImage WHERE well_id IN (${wells})`),
+    ]);
+    res.status(200).json({
+      Wells: w.recordset,
+      FieldActivities: fa.recordset,
+      ClassLabs: cl.recordset,
+      WaterScienceLabs: wsl.recordset,
+      Images: im.recordset,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("Snapshot failed.");
+  }
 });
 
 app.get("/csvqueries", async (req, res) => {
@@ -1204,59 +1249,65 @@ app.get("/GetImage", async (req, res) => {
 });
 
 app.get("/sso/redirect", async (req, res) => {
-  // const defaultTemplate = SamlLib.defaultLoginRequestTemplate;
-  // defaultTemplate.context = insertTagProperty(defaultTemplate.context, 'ForceAuthn="true"');
+  try{
+    // const defaultTemplate = SamlLib.defaultLoginRequestTemplate;
+    // defaultTemplate.context = insertTagProperty(defaultTemplate.context, 'ForceAuthn="true"');
 
-  // function insertTagProperty(xmlTag, property){s
-  //   return xmlTag.replace('>', ` ${property}>`);
-  // }
-  // const crypto = require('crypto'); // Node.js crypto module for generating secure random IDs
+    // function insertTagProperty(xmlTag, property){s
+    //   return xmlTag.replace('>', ` ${property}>`);
+    // }
+    // const crypto = require('crypto'); // Node.js crypto module for generating secure random IDs
 
-  const generateSecureId = () => {
-    // Generates a secure random ID. SAML IDs typically start with an underscore.
-    const characters =
-      "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    let result = "";
-    const charactersLength = characters.length;
-    for (let i = 0; i < 20; i++) {
-      result += characters.charAt(Math.floor(Math.random() * charactersLength));
-    }
-    return result;
-  };
+    const generateSecureId = () => {
+      // Generates a secure random ID. SAML IDs typically start with an underscore.
+      const characters =
+          "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+      let result = "";
+      const charactersLength = characters.length;
+      for (let i = 0; i < 20; i++) {
+        result += characters.charAt(Math.floor(Math.random() * charactersLength));
+      }
+      return result;
+    };
 
-  const getCurrentIsoDateTime = () => {
-    // Returns the current date and time in ISO 8601 format, suitable for IssueInstant
-    return new Date().toISOString();
-  };
+    const getCurrentIsoDateTime = () => {
+      // Returns the current date and time in ISO 8601 format, suitable for IssueInstant
+      return new Date().toISOString();
+    };
 
-  const newId = generateSecureId();
-  const issueInstant = getCurrentIsoDateTime();
-  // req.sp.entityMeta.meta.AllowCreate = 'false';
-  // // const loginRequestTemplate1 = req.sp.entitySetting.loginRequestTemplate;
-  // console.log(req.sp)
-  const { id, context: redirectUrl } = await req.sp.createLoginRequest(
-    req.idp,
-    "redirect",
-    (loginRequestTemplate) => {
-      // console.log(loginRequestTemplate.context);
-      // const modifiedTemplate = { ...loginRequestTemplate, additionalField: 'value' }; // example modification
-      // console.log(typeof loginRequestTemplate.context)
-      let modifiedTemplate = loginRequestTemplate.context
-        .replace("{ID}", newId)
-        .replace("{IssueInstant}", issueInstant);
-      // let modifiedTemplate = ""
+    const newId = generateSecureId();
+    const issueInstant = getCurrentIsoDateTime();
+    // req.sp.entityMeta.meta.AllowCreate = 'false';
+    // // const loginRequestTemplate1 = req.sp.entitySetting.loginRequestTemplate;
+    // console.log(req.sp)
+    const { id, context: redirectUrl } = await req.sp.createLoginRequest(
+        req.idp,
+        "redirect",
+        (loginRequestTemplate) => {
+          // console.log(loginRequestTemplate.context);
+          // const modifiedTemplate = { ...loginRequestTemplate, additionalField: 'value' }; // example modification
+          // console.log(typeof loginRequestTemplate.context)
+          let modifiedTemplate = loginRequestTemplate.context
+              .replace("{ID}", newId)
+              .replace("{IssueInstant}", issueInstant);
+          // let modifiedTemplate = ""
 
-      // console.log(modifiedTemplate)
-      return {
-        id: newId, // ensure this is unique or correctly generated
-        context: modifiedTemplate,
-      };
-    },
-  );
-  console.log("id: " + id);
-  console.log("Context returned: " + redirectUrl + "\n");
+          // console.log(modifiedTemplate)
+          return {
+            id: newId, // ensure this is unique or correctly generated
+            context: modifiedTemplate,
+          };
+        },
+    );
+    console.log("id: " + id);
+    console.log("Context returned: " + redirectUrl + "\n");
 
-  return res.status(200).send(redirectUrl);
+    return res.status(200).send(redirectUrl);
+  } catch (err)
+  {
+    console.error("SSO redirect failed:", err);
+    res.status(500).send("Login is unavailable right now.");
+  }
 });
 
 app.get("/logout", async (req, res) => {
@@ -1402,7 +1453,7 @@ app.post("/saml/acs", async (req, res) => {
     req.session.displayName = displayName;
 
     console.log("kywmem Value: ", kywmemValue);
-    console.log(" displayName Value: ", displayName);
+    console.log("displayName Value: ", displayName);
   });
   res.redirect("/Well");
 });

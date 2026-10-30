@@ -6,9 +6,9 @@ import Axios from "axios";
 import pullAt from "lodash/pullAt";
 import Login from "./components/login";
 import NavMenu from "./components/navmenu";
-import Wellselection from "./components/wellselection";
+import WellSelection from "./components/wellSelection";
 import EditWell from "./components/editwell";
-import WellInfo, { generateWellcode } from "./components/wellinfo";
+import WellInfo, { generateWellCode } from "./components/wellinfo";
 import Field from "./components/field";
 import ClassLab from "./components/classlab";
 import PreviousEntries from "./components/previousentries";
@@ -30,6 +30,7 @@ import uploadPhoto from "./components/reusable/photoUpload";
 import { deleteFromDB, getAllFromDB, idbName } from "./setupIndexedDB";
 
 export default function App() {
+  console.log("knowyourwell/knowyourwell/ClientApp/src/App.js --> App")
   const [coords, setCoords] = useState(() => {
     // Try to update coords
     if (navigator.geolocation) {
@@ -108,7 +109,7 @@ export default function App() {
     }
 
     for (const [i, wellInfo] of wellInfoQueue.entries()) {
-      const wellcode = await generateWellcode();
+      const wellcode = await generateWellCode();
       await Axios.post("/createwellinfo", {
         address: wellInfo.address,
         aquiferclass: wellInfo.aquiferclass,
@@ -286,7 +287,7 @@ export default function App() {
         >
           <Routes>
             <Route exact path="/" element={<Login />} />
-            <Route exact path="/well" element={<Wellselection />} />
+            <Route exact path="/well" element={<WellSelection />} />
             <Route exact path="/editwell" element={<EditWell />} />
             <Route exact path="/wellinfo" element={<WellInfo />} />
             <Route exact path="/field" element={<Field />} />
@@ -310,33 +311,3 @@ export default function App() {
   );
 }
 
-const CachedPreviousEntries = () => {
-  const [cachedData, setCachedData] = useState(null);
-
-  useEffect(() => {
-    const getCachedData = async () => {
-      const cache = await caches.open("previous-entries");
-      const cachedResponse = await cache.match("/previousentries");
-
-      if (cachedResponse) {
-        const data = await cachedResponse.json();
-        setCachedData(data);
-      }
-    };
-
-    getCachedData();
-  }, []);
-
-  return (
-    <div>
-      <h2>Previous Entries (Cached)</h2>
-      {cachedData && (
-        <ul>
-          {cachedData.map((entry, index) => (
-            <li key={index}>{entry}</li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-};
