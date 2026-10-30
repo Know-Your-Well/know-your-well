@@ -5,9 +5,9 @@
  https://github.com/Leaflet/Leaflet.heat
  version: 0.0.2
 */
-!function(){
-"use strict";
+import L from "leaflet";
 
+const simpleidw = (() => {
     function simpleidw(canvas) {
         if (!(this instanceof simpleidw)) return new simpleidw(canvas);
 
@@ -141,11 +141,11 @@
                 pixels[i + 3] = opacity * 256;
             }
         }
-    },
-    window.simpleidw = simpleidw
-}(),
+    };
+    return simpleidw;
+})();
 
-L.IdwLayer = (L.Layer ? L.Layer : L.Class).extend({
+const IdwLayer = (L.Layer ? L.Layer : L.Class).extend({
     /*
     options: {
         opacity: 0.5,
@@ -277,7 +277,6 @@ L.IdwLayer = (L.Layer ? L.Layer : L.Class).extend({
             exp = this.options.exp === undefined ? 1 : this.options.exp,
             // max idw value
             maxVal = this.options.max === undefined ? 1 : this.options.max,
-            maxZoom = this.options.maxZoom === undefined ? this._map.getMaxZoom() : this.options.maxZoom,
             range = this.options.range === undefined ? 0.0 : this.options.range,
             cellCen = r / 2,
             nCellX = Math.ceil((bounds.max.x - bounds.min.x) / r) + 1,
@@ -286,10 +285,10 @@ L.IdwLayer = (L.Layer ? L.Layer : L.Class).extend({
         var cellsn = new Array(nCellY),
             cellsd = new Array(nCellY);
         // initialize cellsn and cellsd to 0
-        for (var i = 0; i < nCellY; i++) {
+        for (let i = 0; i < nCellY; i++) {
             cellsn[i] = new Array(nCellX);
             cellsd[i] = new Array(nCellX);
-            for (var j = 0; j < nCellX; j++) {
+            for (let j = 0; j < nCellX; j++) {
                 cellsn[i][j] = 0.0;
                 cellsd[i][j] = 0.0;
           }
@@ -306,18 +305,15 @@ L.IdwLayer = (L.Layer ? L.Layer : L.Class).extend({
                 offsetX = Math.abs(leftTop.lng - rightBottom.lng) * 104.64 / map.getSize().x,
                 // km per pixel on y-axis
                 offsetY = Math.abs(leftTop.lat - rightBottom.lat) * 110.69 / map.getSize().y
-            for(var index = this._latlngs.length - 1; index >= 0; index--) {
-                var p = this._map.latLngToContainerPoint(
+            for (let index = this._latlngs.length - 1; index >= 0; index--) {
+                const p = this._map.latLngToContainerPoint(
                         L.latLng(this._latlngs[index][0], this._latlngs[index][1])
-                    ),
-                    // left pixel coordinate of the cell
-                    x1 = p.x - range / offsetX,
-                    // right
-                    x2 = p.x + range / offsetX,
-                    // top
-                    y1 = p.y - range / offsetY,
-                    // bottom
-                    y2 = p.y + range / offsetY;
+                        );
+                    // left/right and top/bottom pixel coordinates of the cell
+                    let x1 = p.x - range / offsetX;
+                    let x2 = p.x + range / offsetX;
+                    let y1 = p.y - range / offsetY;
+                    let y2 = p.y + range / offsetY;
 
                     // cell coordinate
                     x1 = Math.round(x1 / r + 0.5);
@@ -339,15 +335,15 @@ L.IdwLayer = (L.Layer ? L.Layer : L.Class).extend({
                     range, offsetX, offsetY);
             }
         } else {
-            for(var index = this._latlngs.length - 1; index >= 0; index--) {
-                var p = this._map.latLngToContainerPoint(L.latLng(this._latlngs[index][0], this._latlngs[index][1]));
+            for (let index = this._latlngs.length - 1; index >= 0; index--) {
+                const p = this._map.latLngToContainerPoint(L.latLng(this._latlngs[index][0], this._latlngs[index][1]));
                 this._idwCalculation(p, r, exp, index,
                     0, nCellX - 1, 0, nCellY - 1, cellCen, cellsd, cellsn, range);
             }
         }
 
-        for (var i = 0; i < nCellY; i++) {
-            for (var j = 0; j < nCellX; j++) {
+        for (let i = 0; i < nCellY; i++) {
+            for (let j = 0; j < nCellX; j++) {
                 if (cellsd[i][j] < 0.0) {
                     cellsd[i][j] = 1.0;
                 }
@@ -434,6 +430,6 @@ L.IdwLayer = (L.Layer ? L.Layer : L.Class).extend({
     }
 });
 
-L.idwLayer = function (latlngs, options) {
-    return new L.IdwLayer(latlngs, options);
-};
+export function idwLayer(latlngs, options) {
+    return new IdwLayer(latlngs, options);
+}

@@ -22,14 +22,14 @@ import "./css/wells.css";
 
 import "leaflet.heat";
 // import "leaflet.idw";
-import "./leaflet-idw.js";
+import { idwLayer } from "./leaflet-idw.js";
 
 function WellsHeatmap({ points }) {
   const map = useMap();
 
   useEffect(() => {
 
-    const layer = L.idwLayer(points, {
+    const layer = idwLayer(points, {
       opacity: 0.7,
       cellSize: 4,
       exp: 2,
