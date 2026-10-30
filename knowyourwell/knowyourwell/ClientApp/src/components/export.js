@@ -27,7 +27,7 @@ const sendExportEvent = (type) => {
 
 const exportCSV = () => {
   sendExportEvent('detailed_export');
-  Axios.get("/csvqueries", {
+  return Axios.get("/csvqueries", {
     responseType: "json",
   })
     .then(function (response) {
@@ -50,16 +50,17 @@ const exportCSV = () => {
       });
 
         openDownloadDialog(file);
-        exportPDF();   //export pdf file
+        return exportPDF();   //export pdf file
 
     })
     .catch(function (error) {
       console.error("Error fetching data:", error);
+      throw error;
     });
 };
 
 const exportImagePDF = () => {
-  Axios.get("/allImageMetadata", {
+  return Axios.get("/allImageMetadata", {
     responseType: "json",
   })
     .then(function (response) {
@@ -89,12 +90,13 @@ const exportImagePDF = () => {
     })
     .catch(function (error) {
       console.error("Error exporting image PDF:", error);
+      throw error;
     });
 };
 
 const exportImageMetadata = () => {
   sendExportEvent('image_export');
-  Axios.get('/allImageMetadata', {
+  return Axios.get('/allImageMetadata', {
     responseType: "json",
   }).then((response) => {
     const dataArray = response.data.Data;
@@ -119,14 +121,15 @@ const exportImageMetadata = () => {
       type: "text/csv",
     });
     openDownloadDialog(file);
-    exportImagePDF();   //export pdf file
+    return exportImagePDF();   //export pdf file
   }).catch((error) => {
     console.log(error);
+    throw error;
   });
 };
 
 const exportPDF = () => {
-  Axios.get("/csvqueries", {
+  return Axios.get("/csvqueries", {
     responseType: "json",
   })
     .then(function (response) {
@@ -157,12 +160,35 @@ const exportPDF = () => {
     })
     .catch(function (error) {
       console.error("Error exporting PDF:", error);
+      throw error;
     });
 };
 
 
 
 export default function ExportPage() {
+  const [exportError, setExportError] = React.useState("");
+  const [exporting, setExporting] = React.useState(false);
+
+  const runExport = async (exportAction) => {
+    setExportError("");
+    setExporting(true);
+    try {
+      await exportAction();
+    } catch (error) {
+      console.error("Export failed:", error);
+      if (error.response?.status === 400 || error.response?.status === 401) {
+        setExportError("Please log in before exporting school data.");
+      } else if (error.response?.status === 503) {
+        setExportError("Export is unavailable because the database cannot be reached. Try again when the server is connected.");
+      } else {
+        setExportError("Export failed. Check your connection and try again.");
+      }
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <form
       style={{
@@ -176,6 +202,7 @@ export default function ExportPage() {
         <h2>
           Export Data
         </h2>
+        {exportError && <p role="alert">{exportError}</p>}
         <br />
         <List.Item>
           <List.Content>
@@ -183,7 +210,8 @@ export default function ExportPage() {
             <p>All data for School separated by commas</p>
             <button
               type="button"
-              onClick={exportCSV}
+              onClick={() => runExport(exportCSV)}
+              disabled={exporting}
               className="btn btn-primary"
               style={{ width: "12em" }}
             >
@@ -198,7 +226,8 @@ export default function ExportPage() {
             <p>Selected well data and all image data; no actual images</p>
             <button
               type="button"
-              onClick={exportImageMetadata}
+              onClick={() => runExport(exportImageMetadata)}
+              disabled={exporting}
               className="btn btn-primary"
               style={{ width: "12em" }}
             >

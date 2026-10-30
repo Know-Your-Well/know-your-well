@@ -14,16 +14,24 @@ const createTooltipsRouter = require("./tooltips.js");
 const createWellCodesRouter = require("./wellCodes.js");
 const createWritesRouter = require("./writes.js");
 
-function createApiRouter({ pool, sqlClient }) {
+function createApiRouter({ pool, sqlClient, databaseUnavailable = false }) {
   const router = express.Router();
   router.use(createHealthRouter());
-  router.use(createLandFeaturesRouter({ pool, sqlClient }));
   router.use(createSessionRouter());
-  router.use(createTooltipsRouter({ pool }));
-  router.use(createWellCodesRouter({ pool, sqlClient }));
-  router.use(createDataRouter({ pool, sqlClient }));
-  router.use(createWritesRouter({ pool, sqlClient }));
   router.use(createAuthRouter());
+
+  if (pool) {
+    router.use(createLandFeaturesRouter({ pool, sqlClient }));
+    router.use(createTooltipsRouter({ pool }));
+    router.use(createWellCodesRouter({ pool, sqlClient }));
+    router.use(createDataRouter({ pool, sqlClient }));
+    router.use(createWritesRouter({ pool, sqlClient }));
+  } else if (databaseUnavailable) {
+    router.use((req, res) =>
+      res.status(503).json({ error: "Database unavailable; data requests cannot be served." }),
+    );
+  }
+
   return router;
 }
 

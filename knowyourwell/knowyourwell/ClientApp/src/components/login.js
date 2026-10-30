@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useEffect} from "react";
 import "./css/login_signup.css";
 import Axios from "axios";
 import {useNavigate} from "react-router-dom";
@@ -10,23 +10,18 @@ export default function Login()
 {
     const navigate = useNavigate();
     const {setUser} = useUser();
-    const [loading, setLoading] = useState(true);
 
     useEffect(() =>
     {
         setUser(null);
-    })
+    }, [setUser]);
 
     useEffect(() =>
     {
-        async function initializeDB()
-        {
-            setLoading(true);
-            await setupIndexedDB();
-            setLoading(false);
-        }
-
-        initializeDB();
+        // Login must remain available even if IndexedDB is blocked or unavailable.
+        setupIndexedDB().catch((error) =>
+            console.warn("Offline storage initialization failed:", error)
+        );
     }, []);
 
     const initRedirectRequest = async () =>
@@ -52,11 +47,7 @@ export default function Login()
                 });
         } else
         { // production login redirects to nebraskaCloud.
-            const options = {
-                method: "GET",
-                mode: "no-cors",
-            };
-            fetch("/sso/redirect", options)
+            fetch("/sso/redirect")
                 .then(function (response)
                 {
                     if (!response.ok)
@@ -90,12 +81,8 @@ export default function Login()
                         type="button"
                         className="btn btn-primary btn-lg"
                         onClick={initRedirectRequest}
-                        disabled={loading}
                     >
-                        {loading ?
-                            "Loading..." :
-                            "Login with School Credentials"
-                        }
+                        Login with School Credentials
                     </button>
                 </div>
             </div>

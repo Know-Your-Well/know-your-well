@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import Axios from "axios";
 import {
   Collapse,
@@ -19,10 +19,14 @@ const NavMenu = () => {
   const [collapsed, setCollapsed] = useState(true);
   const toggleNavbar = () => setCollapsed(!collapsed);
   const navigate = useNavigate();
+  const location = useLocation();
   const { user, setUser } = useUser();
 
   useEffect(() => {
     const validateUser = async () => {
+      const publicRoutes = new Set(["/", "/aboutproject"]);
+      if (publicRoutes.has(location.pathname.toLowerCase())) return;
+
       // Only check the user's login status when connected to the internet
       await Axios.get(`/heartbeat?timestamp=${Date.now()}`)
       .then(async () => {
@@ -49,7 +53,7 @@ const NavMenu = () => {
     };
 
     validateUser();
-  }, [navigate, user, setUser]);
+  }, [location.pathname, navigate, user, setUser]);
 
   useEffect(() => {
     if (user?.kywmem) {

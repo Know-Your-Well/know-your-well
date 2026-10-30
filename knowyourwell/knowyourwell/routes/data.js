@@ -96,14 +96,52 @@ function createDataRouter({ pool, sqlClient }) {
     } catch (error) { console.error(error); return res.status(500).json({ error: "Internal Server Error" }); }
   });
 
+  router.get("/offlineSnapshot", async (req, res) => {
+    const schoolId = Number.parseInt(req.session?.kywmem, 10);
+    if (Number.isNaN(schoolId)) {
+      return res.status(401).json({ error: "Not logged in" });
+    }
+
+    const wells = "SELECT well_id FROM dbo.tblWellInfo WHERE school_id = @school";
+    const snapshotQuery = (query) =>
+      recordset(pool, sqlClient, query, [["school", sqlClient.Int, schoolId]]);
+
+    try {
+      const [wellRows, fieldActivities, classLabs, waterScienceLabs, images] = await Promise.all([
+        snapshotQuery("SELECT * FROM dbo.tblWellInfo WHERE school_id = @school"),
+        snapshotQuery(`SELECT * FROM dbo.tblFieldActivity WHERE well_id IN (${wells})`),
+        snapshotQuery(`SELECT cl.* FROM dbo.tblClassroomLab cl
+          JOIN dbo.tblFieldActivity fa ON cl.fieldactivity_id = fa.fieldactivity_id
+          WHERE fa.well_id IN (${wells})`),
+        snapshotQuery(`SELECT wsl.* FROM dbo.tblWaterScienceLab wsl
+          JOIN dbo.tblFieldActivity fa ON wsl.fieldactivity_id = fa.fieldactivity_id
+          WHERE fa.well_id IN (${wells})`),
+        snapshotQuery(`SELECT * FROM dbo.tblImage WHERE well_id IN (${wells})`),
+      ]);
+
+      return res.status(200).json({
+        Wells: wellRows,
+        FieldActivities: fieldActivities,
+        ClassLabs: classLabs,
+        WaterScienceLabs: waterScienceLabs,
+        Images: images,
+      });
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send("Snapshot failed.");
+    }
+  });
+
   router.get("/allImageMetadata", async (req, res) => {
+    const schoolId = req.session?.kywmem;
+    if (!schoolId) return res.status(401).json({ error: "Not logged in" });
     try {
       const rows = await recordset(pool, sqlClient,
         `SELECT w.school_id,s.sch_name,w.well_id,w.wi_wellcode,w.wi_wellname,i.im_type,
          i.im_latitude,i.im_longitude,i.im_filename,i.im_datacollector,i.im_observation,i.im_datecollected
          FROM dbo.tblWellInfo w INNER JOIN dbo.tblImage i ON w.well_id=i.well_id
          INNER JOIN dbo.tblSchool s ON w.school_id=s.school_id WHERE w.school_id=@school_id`,
-        [["school_id", sqlClient.Int, req.session?.kywmem]]);
+        [["school_id", sqlClient.Int, schoolId]]);
       return res.status(200).json({ Data: rows });
     } catch (error) { console.error(error); return res.status(500).send("SERVER ERROR"); }
   });

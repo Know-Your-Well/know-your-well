@@ -79,6 +79,8 @@ function responseDataToMarkerList(responseData) {
 
 const WellSelection = () => {
   const [isLoading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState("");
+  const [retryCount, setRetryCount] = useState(0);
   const [isSortDropdownVisible, setSortDropdownVisibility] = useState(false);
   const [isFilterDropdownVisible, setFilterDropdownVisibility] =
     useState(false);
@@ -112,6 +114,8 @@ const WellSelection = () => {
 
   //credit to https://codewithnico.com/react-wait-axios-to-render/ for conditional rendering
   useEffect(() => {
+    setLoading(true);
+    setLoadError("");
     const queryParams = {};
     if (filter) {
       // The filter is now an object that maps each of the filter types to the value, so we need to parse it into something that can be used in the queryParams
@@ -123,6 +127,7 @@ const WellSelection = () => {
     Axios.get("/Wells", {
       params: queryParams,
       responseType: "json",
+      timeout: 10000,
     })
       .then(function (response) {
         localStorage.setItem("wellData", JSON.stringify(response.data));
@@ -131,9 +136,10 @@ const WellSelection = () => {
       })
       .catch(function (error) {
         console.error("An error occurred while fetching the wells:", error);
-        setLoading(true);
+        setLoadError("Well data could not be loaded. Check the backend/database connection and try again.");
+        setLoading(false);
       });
-  }, [filter, sort]);
+  }, [filter, sort, retryCount]);
 
   const handleBlur = (event) => {
     if (
@@ -720,22 +726,36 @@ const WellSelection = () => {
     );
   } else {
     return (
-      <Tabs
-        selectedIndex={tabIndex}
-        onSelect={(index) => {
-          setTabIndex(index);
-          sessionStorage.setItem("tabIndex", index.toString());
-        }}
-        style={{ height: `${mapHeight}px` }}
-      >
-        <TabList>
-          <Tab>Map View</Tab>
-          <Tab>List View</Tab>
-        </TabList>
+      <>
+        {loadError && (
+          <div role="alert" className="alert alert-warning" style={{ margin: "1rem" }}>
+            {loadError}{" "}
+            <button
+              type="button"
+              className="btn btn-link"
+              onClick={() => setRetryCount((count) => count + 1)}
+            >
+              Retry
+            </button>
+          </div>
+        )}
+        <Tabs
+          selectedIndex={tabIndex}
+          onSelect={(index) => {
+            setTabIndex(index);
+            sessionStorage.setItem("tabIndex", index.toString());
+          }}
+          style={{ height: `${mapHeight}px` }}
+        >
+          <TabList>
+            <Tab>Map View</Tab>
+            <Tab>List View</Tab>
+          </TabList>
 
-        <TabPanel style={{ height: "100%" }}>{getMapView()}</TabPanel>
-        <TabPanel>{getListView()}</TabPanel>
-      </Tabs>
+          <TabPanel style={{ height: "100%" }}>{getMapView()}</TabPanel>
+          <TabPanel>{getListView()}</TabPanel>
+        </Tabs>
+      </>
     );
   }
 };

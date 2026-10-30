@@ -28,8 +28,8 @@ function getDatabaseConfig(env = process.env) {
         idleTimeoutMillis: 30000,
       },
       options: {
-        encrypt: true,
-        trustServerCertificate: false,
+        encrypt: true, // 'true' for Azure SQL
+        trustServerCertificate: false, // 'true' for local dev / self-signed certs
       },
     };
   }

@@ -91,6 +91,17 @@ describe("backend API", () => {
     await request(app).get("/heartbeat").expect(200);
   });
 
+  test("development API keeps session routes available without a database", async () => {
+    const app = createApp({ databaseUnavailable: true });
+    const agent = request.agent(app);
+
+    await agent.get("/heartbeat").expect(200);
+    await agent.get("/createDevSession").expect(200, { success: "success" });
+    await agent
+      .get("/tooltips")
+      .expect(503, { error: "Database unavailable; data requests cannot be served." });
+  });
+
   test("GET /LandFeatures returns rows for the requested well", async () => {
     const rows = [{ well_id: 42, lf_type: "Crop Land" }];
     const { pool, sqlClient, dbRequest } = createFakePool({ recordset: rows });
@@ -218,6 +229,48 @@ describe("backend API", () => {
     await request(app).get("/Wells").expect(500);
   });
 
+  test("GET /offlineSnapshot requires a school session", async () => {
+    const { pool } = createSequencePool([]);
+    const app = createApp({ pool, sqlClient: createSqlTypes() });
+
+    await request(app)
+      .get("/offlineSnapshot")
+      .expect(401, { error: "Not logged in" });
+  });
+
+  test("GET /offlineSnapshot returns all offline data for the session school", async () => {
+    const snapshot = [
+      [{ well_id: 1 }],
+      [{ fieldactivity_id: 2 }],
+      [{ classlab_id: 3 }],
+      [{ watersciencelab_id: 4 }],
+      [{ image_id: 5 }],
+    ];
+    const { pool } = createSequencePool(snapshot);
+    const app = createApp({ pool, sqlClient: createSqlTypes() });
+    const agent = request.agent(app);
+
+    await agent.get("/createDevSession").expect(200);
+    const response = await agent.get("/offlineSnapshot").expect(200);
+
+    expect(response.body).toEqual({
+      Wells: snapshot[0],
+      FieldActivities: snapshot[1],
+      ClassLabs: snapshot[2],
+      WaterScienceLabs: snapshot[3],
+      Images: snapshot[4],
+    });
+  });
+
+  test("GET /allImageMetadata requires a school session", async () => {
+    const { pool } = createSequencePool([]);
+    const app = createApp({ pool, sqlClient: createSqlTypes() });
+
+    await request(app)
+      .get("/allImageMetadata")
+      .expect(401, { error: "Not logged in" });
+  });
+
   test("POST /feature/crop commits a parameterized insert", async () => {
     const { pool, transaction, request: dbRequest } = createWritePool();
     const app = createApp({ pool, sqlClient: createSqlTypes() });
@@ -256,6 +309,25 @@ describe("backend API", () => {
     const response = await request(app).get("/idp/metadata").expect(200);
 
     expect(response.text).toContain("<md:EntityDescriptor");
+  });
+
+  test("GET /sso/redirect returns the identity provider redirect URL", async () => {
+    const redirectUrl = "https://identity.example.test/sso?SAMLRequest=abc";
+    const sp = { createLoginRequest: jest.fn().mockResolvedValue({ context: redirectUrl }) };
+    const app = express();
+    app.use((req, res, next) => {
+      req.idp = {};
+      req.sp = sp;
+      next();
+    });
+    app.use(createAuthRouter());
+
+    await request(app).get("/sso/redirect").expect(200, redirectUrl);
+    expect(sp.createLoginRequest).toHaveBeenCalledWith(
+      {},
+      "redirect",
+      expect.any(Function),
+    );
   });
 
   test("POST /saml/acs stores parsed identity attributes and redirects", async () => {

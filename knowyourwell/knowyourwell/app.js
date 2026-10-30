@@ -12,8 +12,8 @@ const path = require("path");
 const assignEntity = require("./middleware/saml.js");
 const createApiRouter = require("./routes/index.js");
 
-function createApp({ pool, sqlClient } = {}) {
-  if (!pool) {
+function createApp({ pool, sqlClient, databaseUnavailable = false } = {}) {
+  if (!pool && !databaseUnavailable) {
     throw new TypeError("createApp requires a database pool.");
   }
 
@@ -32,7 +32,7 @@ function createApp({ pool, sqlClient } = {}) {
   app.use(express.urlencoded({ extended: true }));
   app.use(express.json());
   app.use(assignEntity);
-  app.use(createApiRouter({ pool, sqlClient }));
+  app.use(createApiRouter({ pool, sqlClient, databaseUnavailable }));
 
   const webRoot = path.resolve(__dirname, "wwwroot");
   app.use(express.static(webRoot));

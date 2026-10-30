@@ -14,12 +14,18 @@ function createAuthRouter() {
   });
 
   router.get("/sso/redirect", async (req, res) => {
-    const id = `_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
-    const issueInstant = new Date().toISOString();
-    const result = await req.sp.createLoginRequest(req.idp, "redirect", (template) => ({
-      id,
-      context: template.context.replace("{ID}", id).replace("{IssueInstant}", issueInstant),
-    }));
+    let result;
+    try {
+      const id = `_${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
+      const issueInstant = new Date().toISOString();
+      result = await req.sp.createLoginRequest(req.idp, "redirect", (template) => ({
+        id,
+        context: template.context.replace("{ID}", id).replace("{IssueInstant}", issueInstant),
+      }));
+    } catch (error) {
+      console.error(error);
+      return res.status(500).send("Login is unavailable right now. Please try again later.");
+    }
     return res.status(200).send(result.context);
   });
 

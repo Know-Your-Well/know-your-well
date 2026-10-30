@@ -6,14 +6,17 @@ const { BlobServiceClient } = require("@azure/storage-blob");
 export const idbName = "localDB";
 
 export default async function setupIndexedDB() {
-  navigator.storage.persist();
   try {
+    await navigator.storage?.persist?.();
     await createLocalDB();
-    await getRemoteTooltipImages();
-    await getTooltipDataFromSqlDatabase();
   } catch (error) {
     console.log(error);
+    return;
   }
+
+  // Remote services should not block the login screen or local database setup.
+  getRemoteTooltipImages().catch((error) => console.warn("Tooltip image sync failed:", error));
+  getTooltipDataFromSqlDatabase().catch((error) => console.warn("Tooltip data sync failed:", error));
 }
 
 async function createLocalDB() {
