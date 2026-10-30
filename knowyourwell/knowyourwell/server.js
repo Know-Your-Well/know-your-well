@@ -13,33 +13,22 @@ const { getDatabaseConfig } = require("./config/database.js");
 
 async function startServer() {
   const pool = new sql.ConnectionPool(getDatabaseConfig());
-  let databaseUnavailable = false;
-
-  try {
-    await pool.connect();
-  } catch (error) {
-    console.error("Unable to connect to the database:", error.message);
-    if (process.env.NODE_ENV === "production") {
-      process.exitCode = 1;
-      return;
-    }
-    databaseUnavailable = true;
-    console.warn("Starting the development API without a database connection.");
-  }
-
-  const app = createApp({
-    pool: databaseUnavailable ? null : pool,
-    sqlClient: sql,
-    databaseUnavailable,
-  });
+  const app = createApp({ pool, sqlClient: sql });
   const port = Number(process.env.PORT) || 7193;
   const server = app.listen(port, () => {
     console.log(`API server is running on port ${port}.`);
   });
 
+  // Start serving health, session, and authentication routes immediately. A
+  // transient or unavailable SQL connection must not prevent the API process
+  // from listening, since those routes do not depend on the database.
+  pool.connect().catch((error) => {
+    console.error("Unable to connect to the database; data routes may fail:", error.message);
+  });
+
   const shutdown = () => {
     server.close(async () => {
-      if (!databaseUnavailable) await pool.close();
+      if (pool.connected) await pool.close();
       process.exit(0);
     });
   };
