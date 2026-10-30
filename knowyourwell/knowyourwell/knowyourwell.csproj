@@ -49,6 +49,11 @@
 		</None>
 		<None Update="index.js">
 			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+		</None>
+		<None Update="app.js;server.js;package-lock.json;config\**\*;routes\**\*">
+			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+			<CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
 		</None>
 		<None Update="metadata\testidp.xml">
 		  <CopyToOutputDirectory>Always</CopyToOutputDirectory>
